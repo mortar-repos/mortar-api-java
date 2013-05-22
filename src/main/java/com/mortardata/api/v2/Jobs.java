@@ -16,10 +16,15 @@ public class Jobs {
     }
     
     public JobsList getJobs() throws IOException {
-        HttpRequest request = this.api.buildHttpGetRequest("jobs?limit=10");
+        HttpRequest request = this.api.buildHttpGetRequest("jobs");
         return request.execute().parseAs(Jobs.JobsList.class);
     }
-    
+
+    public JobsList getJobs(Integer skip, Integer limit) throws IOException {
+        HttpRequest request = this.api.buildHttpGetRequest("jobs?skip=" + skip + "&limit=" + limit);
+        return request.execute().parseAs(Jobs.JobsList.class);
+    }
+
     public Job getJob(String jobId) throws IOException {
         HttpRequest request = this.api.buildHttpGetRequest("jobs/" + jobId);
         return request.execute().parseAs(Jobs.Job.class);
