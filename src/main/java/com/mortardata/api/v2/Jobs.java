@@ -20,6 +20,11 @@ public class Jobs {
         return request.execute().parseAs(Jobs.JobsList.class);
     }
     
+    public Job getJob(String jobId) throws IOException {
+        HttpRequest request = this.api.buildHttpGetRequest("jobs/" + jobId);
+        return request.execute().parseAs(Jobs.Job.class);
+    }
+    
     public static class JobsList {
         @Key("job_count")
         public Integer jobCount;
