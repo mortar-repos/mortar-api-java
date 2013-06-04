@@ -29,25 +29,20 @@
           </execution>
         </executions>
         <configuration>
-          <mainClass>com.mortardata.api.v2.API</mainClass>
-          <systemProperties>
-            <systemProperty>
-              <key>java.util.logging.config.file</key>
-              <value>logging.properties</value>
-            </systemProperty>
-          </systemProperties>
+          <mainClass>com.mortardata.project.EmbeddedMortarProject</mainClass>
         </configuration>
       </plugin>
       <plugin>
         <artifactId>maven-checkstyle-plugin</artifactId>
         <version>2.6</version>
         <configuration>
-          <configLocation>../checkstyle.xml</configLocation>
+          <configLocation>checkstyle.xml</configLocation>
           <consoleOutput>true</consoleOutput>
-          <failOnViolation>false</failOnViolation>
+          <failOnViolation>true</failOnViolation>
         </configuration>
         <executions>
           <execution>
+            <phase>package</phase>
             <goals>
               <goal>check</goal>
             </goals>
@@ -69,6 +64,11 @@
           </execution>
         </executions>
       </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>2.14.1</version>
+      </plugin>      
     </plugins>
     <finalName>${project.artifactId}-${project.version}</finalName>
   </build>
@@ -83,9 +83,48 @@
       <artifactId>google-http-client-jackson2</artifactId>
       <version>${project.http.version}</version>
     </dependency>
+    <dependency>
+        <groupId>commons-io</groupId>
+        <artifactId>commons-io</artifactId>
+        <version>${project.commons-io.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.jgit</groupId>
+      <artifactId>org.eclipse.jgit</artifactId>
+      <version>${project.jgit.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <version>${project.slf4j.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-log4j12</artifactId>
+      <version>${project.slf4j-log4j12.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>${project.junit.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.jgit</groupId>
+      <artifactId>org.eclipse.jgit.junit</artifactId>
+      <version>${project.jgit.junit.version}</version>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
   <properties>
-    <project.http.version>1.15.0-rc</project.http.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.commons-io.version>2.4</project.commons-io.version>
+    <project.http.version>1.15.0-rc</project.http.version>
+    <project.jgit.version>2.3.1.201302201838-r</project.jgit.version>
+    <project.jgit.junit.version>2.3.1.201302201838-r</project.jgit.junit.version>
+    <project.junit.version>4.11</project.junit.version>
+    <project.slf4j.version>1.7.5</project.slf4j.version>
+    <project.slf4j-log4j12.version>1.7.5</project.slf4j-log4j12.version>
   </properties>
 </project>
