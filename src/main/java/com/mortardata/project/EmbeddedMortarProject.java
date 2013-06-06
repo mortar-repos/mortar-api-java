@@ -329,10 +329,10 @@ public class EmbeddedMortarProject {
     public static void main(String[] args) throws IOException {
         EmbeddedMortarProject p = 
                 new EmbeddedMortarProject(
-        p.deployToMortar("XXXXXXXXXX", "XXXXXXXXXX", "foobar");
                         new File(
                                 "/Users/ddaniels/projects/prod/" +
                                 "my-sample-project/ddaniels_embedded_project"));
+        p.deployToMortar("XXXXXXXXXX", "XXXXXXXXXX", "foobar");
     }
 
 }
