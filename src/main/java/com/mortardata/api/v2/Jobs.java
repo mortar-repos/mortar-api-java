@@ -82,17 +82,46 @@ public class Jobs {
     /**
      * TODO doc.
      *
+     * @param jobId
+     * @return
+     * @throws IOException
+     */
+    public void stopJob(String jobId) throws IOException {
+        HttpRequest request = this.api.buildHttpDeleteRequest("jobs/" + jobId);
+        request.execute();
+    }
+
+    /**
+     * TODO doc.
+     *
+     * @param jobRequest
+     * @return job_id
+     * @throws IOException
      */
     public String postJob(JobRequest jobRequest) throws IOException {
         HttpRequest request = this.api.buildHttpPostRequest("jobs", jobRequest.getArguments());
         return (String) request.execute().parseAs(HashMap.class).get("job_id");
     }
 
+    /**
+     * TODO doc.
+     *
+     * @param jobId
+     * @return statusCode
+     * @throws IOException
+     */
     public String getJobStatus(String jobId) throws IOException {
         Job job = getJob(jobId);
         return job.statusCode;
     }
 
+    /**
+     * TODO doc.
+     *
+     * @param jobId
+     * @return final statusCode
+     * @throws IOException, InterruptedException
+     */
     public String blockUntilJobComplete(String jobId) throws IOException, InterruptedException {
         while (true) {
             String jobStatus = getJobStatus(jobId);
@@ -102,6 +131,8 @@ public class Jobs {
             Thread.sleep(1000);
         }
     }
+
+
 
     
     /**
