@@ -16,6 +16,7 @@
 package com.mortardata.api.v2;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,6 +32,7 @@ public class Jobs {
     
     private API api;
 
+    private final List<String> jobStatusComplete = Arrays.asList("script_error", "plan_error", "success", "execution_error", "service_error", "stopped");
 
 
     /**
@@ -86,6 +88,20 @@ public class Jobs {
         return (String) request.execute().parseAs(HashMap.class).get("job_id");
     }
 
+    public String getJobStatus(String jobId) throws IOException {
+        Job job = getJob(jobId);
+        return job.statusCode;
+    }
+
+    public String blockUntilJobComplete(String jobId) throws IOException, InterruptedException {
+        while (true) {
+            String jobStatus = getJobStatus(jobId);
+            if (jobStatusComplete.contains(jobStatus)) {
+                return jobStatus;
+            }
+            Thread.sleep(1000);
+        }
+    }
 
     
     /**
