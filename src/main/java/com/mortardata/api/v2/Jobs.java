@@ -26,14 +26,14 @@ import com.google.api.client.util.Key;
 
 /**
  * TODO doc.
- *
  */
 public class Jobs {
     
     private API api;
 
-    private final List<String> jobStatusComplete = Arrays.asList("script_error", "plan_error", "success", "execution_error", "service_error", "stopped");
-
+    private final List<String> jobStatusComplete =
+            Arrays.asList("script_error", "plan_error", "success", "execution_error",
+                    "service_error", "stopped");
 
     /**
      * TODO doc.
@@ -120,7 +120,8 @@ public class Jobs {
      *
      * @param jobId
      * @return final statusCode
-     * @throws IOException, InterruptedException
+     * @throws IOException
+     * @throws InterruptedException
      */
     public String blockUntilJobComplete(String jobId) throws IOException, InterruptedException {
         while (true) {
@@ -191,6 +192,9 @@ public class Jobs {
     
     }
 
+    /**
+     * TODO doc.
+     */
     public enum ClusterType {
 
         SINGLE_JOB("single_job"),

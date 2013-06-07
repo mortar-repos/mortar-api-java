@@ -1,7 +1,25 @@
+/*
+ * Copyright 2013 Mortar Data Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.mortardata.api.v2;
 
 import java.util.HashMap;
 
+/**
+ * TODO doc.
+ */
 public class JobRequest {
 
     private String projectName;
@@ -14,6 +32,16 @@ public class JobRequest {
     private boolean isControlScript = false;
     private String clusterId;
 
+
+    /**
+     * TODO doc.
+     *
+     * @param projectName
+     * @param scriptName
+     * @param gitRef
+     * @param clusterSize
+     * @return
+     */
     public JobRequest(String projectName, String scriptName, String gitRef, int clusterSize) {
         this.projectName = projectName;
         this.scriptName = scriptName;
@@ -21,6 +49,15 @@ public class JobRequest {
         this.clusterSize = clusterSize;
     }
 
+    /**
+     * TODO doc.
+     *
+     * @param projectName
+     * @param scriptName
+     * @param gitRef
+     * @param clusterId
+     * @return
+     */
     public JobRequest(String projectName, String scriptName, String gitRef, String clusterId) {
         this.projectName = projectName;
         this.scriptName = scriptName;
@@ -28,6 +65,10 @@ public class JobRequest {
         this.clusterId = clusterId;
     }
 
+
+    /**
+     * TODO doc.
+     */
     public HashMap<String, Object> getArguments() {
         HashMap<String, Object> arguments = new HashMap<String, Object>();
         arguments.put("project_name", projectName);
