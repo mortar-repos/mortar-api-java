@@ -16,6 +16,7 @@
 package com.mortardata.api.v2;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -29,6 +30,8 @@ import com.google.api.client.util.Key;
 public class Jobs {
     
     private API api;
+
+
 
     /**
      * TODO doc.
@@ -73,6 +76,17 @@ public class Jobs {
         HttpRequest request = this.api.buildHttpGetRequest("jobs/" + jobId);
         return request.execute().parseAs(Jobs.Job.class);
     }
+
+    /**
+     * TODO doc.
+     *
+     */
+    public String postJob(JobRequest jobRequest) throws IOException {
+        HttpRequest request = this.api.buildHttpPostRequest("jobs", jobRequest.getArguments());
+        return (String) request.execute().parseAs(HashMap.class).get("job_id");
+    }
+
+
     
     /**
      * TODO doc.
@@ -129,5 +143,24 @@ public class Jobs {
         public String stopTimestamp;
     
     }
-    
+
+    public enum ClusterType {
+
+        SINGLE_JOB("single_job"),
+        PERSISTENT("persistent"),
+        PERMANENT("permanent");
+
+        private String returnString;
+
+        ClusterType(String returnString) {
+            this.returnString = returnString;
+        }
+
+        public String getReturnString() {
+            return returnString;
+        }
+    }
+
+
+
 }
