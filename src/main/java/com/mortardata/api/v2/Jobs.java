@@ -33,10 +33,10 @@ import com.google.api.client.util.Value;
 public class Jobs {
     
     private API api;
-    private int POLLING_DELAY = 5000;
+    private static final int POLLING_DELAY = 5000;
 
 
-    public static final Set<JobStatus> jobStatusComplete = new HashSet<JobStatus>
+    public static final Set<JobStatus> JOB_STATUS_COMPLETE = new HashSet<JobStatus>
             (Arrays.asList(JobStatus.SCRIPT_ERROR, JobStatus.PLAN_ERROR, JobStatus.SUCCESS,
                     JobStatus.EXECUTION_ERROR, JobStatus.SERVICE_ERROR, JobStatus.STOPPED));
 
@@ -131,7 +131,7 @@ public class Jobs {
     public JobStatus blockUntilJobComplete(String jobId) throws IOException, InterruptedException {
         while (true) {
             JobStatus jobStatus = getJobStatus(jobId);
-            if (jobStatusComplete.contains(jobStatus)) {
+            if (JOB_STATUS_COMPLETE.contains(jobStatus)) {
                 return jobStatus;
             }
             Thread.sleep(POLLING_DELAY);
@@ -198,37 +198,8 @@ public class Jobs {
     /**
      * TODO doc.
      */
-    public enum ClusterType {
-
-        @Value("single_job")
-        SINGLE_JOB("single_job"),
-        @Value("persistent")
-        PERSISTENT("persistent"),
-        @Value("permanent")
-        PERMANENT("permanent");
-
-        private String typeString;
-
-        ClusterType(String typeString) {
-            this.typeString = typeString;
-        }
-
-        public String toString() {
-            return typeString;
-        }
-
-        public static ClusterType getEnum(String typeString) {
-            for (ClusterType t : values()) {
-                if (t.typeString.equalsIgnoreCase(typeString)) {
-                    return t;
-                }
-            }
-            throw new IllegalArgumentException();
-        }
-    }
-
-
     public enum JobStatus {
+
         @Value("starting")
         STARTING,
         @Value("validating_script")
@@ -251,7 +222,6 @@ public class Jobs {
         STOPPING,
         @Value("stopped")
         STOPPED;
-
 
     }
 

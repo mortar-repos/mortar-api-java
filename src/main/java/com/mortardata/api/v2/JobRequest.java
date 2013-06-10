@@ -27,7 +27,7 @@ public class JobRequest {
     private String gitRef;
     private int clusterSize;
     private boolean notifyOnJobFinish = true;
-    private Jobs.ClusterType clusterType = Jobs.ClusterType.PERSISTENT;
+    private Clusters.ClusterType clusterType = Clusters.ClusterType.PERSISTENT;
     private HashMap parameters = new HashMap();
     private boolean isControlScript = false;
     private String clusterId;
@@ -97,11 +97,11 @@ public class JobRequest {
         this.notifyOnJobFinish = notifyOnJobFinish;
     }
 
-    public Jobs.ClusterType getClusterType() {
+    public Clusters.ClusterType getClusterType() {
         return clusterType;
     }
 
-    public void setClusterType(Jobs.ClusterType clusterType) {
+    public void setClusterType(Clusters.ClusterType clusterType) {
         this.clusterType = clusterType;
     }
 
