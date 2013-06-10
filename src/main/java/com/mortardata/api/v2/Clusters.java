@@ -64,6 +64,7 @@ public class Clusters {
         public List<Clusters.Cluster> clusters;
     }
 
+
     /**
      * TODO doc.
      */
@@ -99,7 +100,7 @@ public class Clusters {
         public String duration;
 
         @Key("cluster_type_code")
-        public String clusterTypeCode;
+        public ClusterType clusterTypeCode;
 
         @Key("cluster_type_description")
         public String clusterTypeDescription;
@@ -108,6 +109,9 @@ public class Clusters {
         public int size;
     }
 
+    /**
+     * TODO doc.
+     */
     public enum ClusterStatus {
 
         @Value("pending")
@@ -126,5 +130,37 @@ public class Clusters {
         DESTROYED,
         @Value("failed")
         FAILED;
+    }
+
+    /**
+     * TODO doc.
+     */
+    public enum ClusterType {
+
+        @Value("single_job")
+        SINGLE_JOB("single_job"),
+        @Value("persistent")
+        PERSISTENT("persistent"),
+        @Value("permanent")
+        PERMANENT("permanent");
+
+        private String typeString;
+
+        ClusterType(String typeString) {
+            this.typeString = typeString;
+        }
+
+        public String toString() {
+            return typeString;
+        }
+
+        public static ClusterType getEnum(String typeString) {
+            for (ClusterType t : values()) {
+                if (t.typeString.equalsIgnoreCase(typeString)) {
+                    return t;
+                }
+            }
+            throw new IllegalArgumentException();
+        }
     }
 }
