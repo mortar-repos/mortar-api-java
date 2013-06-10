@@ -46,7 +46,15 @@ public class EmbeddedMortarProject {
      */
     public static final String DEPLOY_TARGET_BRANCH_DEFAULT = "master";
     
+    /**
+     * Filename in Embedded Mortar Project that contains list of files/directories to sync.
+     */
     public static final String MORTAR_PROJECT_MANIFEST_FILENAME = ".mortar-project-manifest";
+    
+    /**
+     * Filename in Embedded Mortar Project that contains git remote for Mortar git mirror. 
+     */
+    public static final String MORTAR_PROJECT_REMOTE_FILENAME = ".mortar-project-remote";
     
     private File rootPath;
     private GitUtil gitUtil;
@@ -189,7 +197,7 @@ public class EmbeddedMortarProject {
             .call();
     }
     
-    private void syncEmbeddedProjectWithMirror(Git gitMirror, CredentialsProvider cp, 
+    void syncEmbeddedProjectWithMirror(Git gitMirror, CredentialsProvider cp, 
             String targetBranch, String committer) 
             throws GitAPIException, IOException {
         
@@ -284,9 +292,9 @@ public class EmbeddedMortarProject {
                     this.rootPath);
         }
         
-        File mortarProjectRemoteFile = new File(this.rootPath, ".mortar-project-remote");
+        File mortarProjectRemoteFile = new File(this.rootPath, MORTAR_PROJECT_REMOTE_FILENAME);
         if (!mortarProjectRemoteFile.exists()) {
-            throw new IOException("A .mortar-project-remote file must exist under the " + 
+            throw new IOException("A " + MORTAR_PROJECT_REMOTE_FILENAME + " file must exist under the " + 
                     "project root. No file found at " + mortarProjectRemoteFile);
         }
         

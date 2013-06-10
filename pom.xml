@@ -116,6 +116,12 @@
       <version>${project.jgit.junit.version}</version>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-all</artifactId>
+      <version>${project.mockito.version}</version>
+      <scope>test</scope>
+</dependency>
   </dependencies>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -124,6 +130,7 @@
     <project.jgit.version>2.3.1.201302201838-r</project.jgit.version>
     <project.jgit.junit.version>2.3.1.201302201838-r</project.jgit.junit.version>
     <project.junit.version>4.11</project.junit.version>
+    <project.mockito.version>1.9.5</project.mockito.version>
     <project.slf4j.version>1.7.5</project.slf4j.version>
     <project.slf4j-log4j12.version>1.7.5</project.slf4j-log4j12.version>
   </properties>
