@@ -17,6 +17,7 @@ package com.mortardata.api.v2;
 
 import com.google.api.client.http.HttpRequest;
 import com.google.api.client.util.Key;
+import com.google.api.client.util.Value;
 
 import java.io.IOException;
 import java.util.List;
@@ -71,7 +72,7 @@ public class Clusters {
         public String clusterId;
 
         @Key("status_code")
-        public String statusCode;
+        public ClusterStatus statusCode;
 
         @Key("status_description")
         public String statusDescription;
@@ -105,5 +106,25 @@ public class Clusters {
 
         @Key("size")
         public int size;
+    }
+
+    public enum ClusterStatus {
+
+        @Value("pending")
+        PENDING,
+        @Value("starting")
+        STARTING,
+        @Value("starting_requested_stop")
+        STARTING_REQUESTED_STOP,
+        @Value("mortar_bootstrapping")
+        MORTAR_BOOTSTRAPPING,
+        @Value("running")
+        RUNNING,
+        @Value("stopping")
+        STOPPING,
+        @Value("destroyed")
+        DESTROYED,
+        @Value("failed")
+        FAILED;
     }
 }
