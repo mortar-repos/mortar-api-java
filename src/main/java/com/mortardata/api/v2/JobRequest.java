@@ -76,7 +76,7 @@ public class JobRequest {
         if (clusterId != null) {
             arguments.put("cluster_id", clusterId);
         } else {
-            arguments.put("cluster_type", clusterType.getReturnString());
+            arguments.put("cluster_type", clusterType.toString());
             arguments.put("cluster_size", clusterSize);
         }
         arguments.put("parameters", parameters);

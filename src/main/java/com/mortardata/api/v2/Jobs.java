@@ -18,8 +18,10 @@ package com.mortardata.api.v2;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import com.google.api.client.http.HttpRequest;
 import com.google.api.client.util.Key;
@@ -30,10 +32,12 @@ import com.google.api.client.util.Key;
 public class Jobs {
     
     private API api;
+    private int POLLING_DELAY = 5000;
 
-    private final List<String> jobStatusComplete =
-            Arrays.asList("script_error", "plan_error", "success", "execution_error",
-                    "service_error", "stopped");
+
+    public static final Set<JobStatus> jobStatusComplete = new HashSet<JobStatus>
+            (Arrays.asList(JobStatus.SCRIPT_ERROR, JobStatus.PLAN_ERROR, JobStatus.SUCCESS,
+                    JobStatus.EXECUTION_ERROR, JobStatus.SERVICE_ERROR, JobStatus.STOPPED));
 
     /**
      * TODO doc.
@@ -110,9 +114,9 @@ public class Jobs {
      * @return statusCode
      * @throws IOException
      */
-    public String getJobStatus(String jobId) throws IOException {
+    public JobStatus getJobStatus(String jobId) throws IOException {
         Job job = getJob(jobId);
-        return job.statusCode;
+        return JobStatus.getEnum(job.statusCode);
     }
 
     /**
@@ -123,19 +127,17 @@ public class Jobs {
      * @throws IOException
      * @throws InterruptedException
      */
-    public String blockUntilJobComplete(String jobId) throws IOException, InterruptedException {
+    public JobStatus blockUntilJobComplete(String jobId) throws IOException, InterruptedException {
         while (true) {
-            String jobStatus = getJobStatus(jobId);
+            JobStatus jobStatus = getJobStatus(jobId);
             if (jobStatusComplete.contains(jobStatus)) {
                 return jobStatus;
             }
-            Thread.sleep(1000);
+            Thread.sleep(POLLING_DELAY);
         }
     }
 
 
-
-    
     /**
      * TODO doc.
      */
@@ -201,17 +203,59 @@ public class Jobs {
         PERSISTENT("persistent"),
         PERMANENT("permanent");
 
-        private String returnString;
+        private String typeString;
 
-        ClusterType(String returnString) {
-            this.returnString = returnString;
+        ClusterType(String typeString) {
+            this.typeString = typeString;
         }
 
-        public String getReturnString() {
-            return returnString;
+        public String toString() {
+            return typeString;
+        }
+
+        public static ClusterType getEnum(String typeString) {
+            for (ClusterType t : values()) {
+                if (t.typeString.equalsIgnoreCase(typeString)) {
+                    return t;
+                }
+            }
+            throw new IllegalArgumentException();
         }
     }
 
 
+    public enum JobStatus {
+        STARTING("starting"),
+        VALIDATING_SCRIPT("validating_script"),
+        SCRIPT_ERROR("script_error"),
+        PLAN_ERROR("plan_error"),
+        STARTING_CLUSTER("starting_cluster"),
+        RUNNING("running"),
+        SUCCESS("success"),
+        EXECUTION_ERROR("execution_error"),
+        SERVICE_ERROR("service_error"),
+        STOPPING("stopping"),
+        STOPPED("stopped");
+
+        private String statusString;
+
+        JobStatus(String statusString) {
+            this.statusString = statusString;
+        }
+
+        public String toString() {
+            return statusString;
+        }
+
+
+        public static JobStatus getEnum(String statusString) {
+            for (JobStatus s : values()) {
+                if (s.statusString.equalsIgnoreCase(statusString)) {
+                    return s;
+                }
+            }
+            throw new IllegalArgumentException();
+        }
+    }
 
 }
