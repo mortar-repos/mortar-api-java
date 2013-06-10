@@ -67,7 +67,7 @@ JobRequest jobRequest = new JobRequest(projectName, scriptName, codeVersion, clu
 String jobId = jobs.postJob(jobRequest);
 
 // wait for job completion
-String finalJobStatus = jobs.blockUntilJobComplete(jobId);
+JobStatus finalJobStatus = jobs.blockUntilJobComplete(jobId);
 ```
 
 ## Javadoc

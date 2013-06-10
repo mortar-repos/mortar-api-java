@@ -25,6 +25,7 @@ import java.util.Set;
 
 import com.google.api.client.http.HttpRequest;
 import com.google.api.client.util.Key;
+import com.google.api.client.util.Value;
 
 /**
  * TODO doc.
@@ -116,7 +117,7 @@ public class Jobs {
      */
     public JobStatus getJobStatus(String jobId) throws IOException {
         Job job = getJob(jobId);
-        return JobStatus.getEnum(job.statusCode);
+        return job.statusCode;
     }
 
     /**
@@ -154,7 +155,7 @@ public class Jobs {
      */
     public static class Job {
         @Key("status_code")
-        public String statusCode;
+        public JobStatus statusCode;
     
         @Key("status_description")
         public String statusDescription;
@@ -199,8 +200,11 @@ public class Jobs {
      */
     public enum ClusterType {
 
+        @Value("single_job")
         SINGLE_JOB("single_job"),
+        @Value("persistent")
         PERSISTENT("persistent"),
+        @Value("permanent")
         PERMANENT("permanent");
 
         private String typeString;
@@ -225,37 +229,30 @@ public class Jobs {
 
 
     public enum JobStatus {
-        STARTING("starting"),
-        VALIDATING_SCRIPT("validating_script"),
-        SCRIPT_ERROR("script_error"),
-        PLAN_ERROR("plan_error"),
-        STARTING_CLUSTER("starting_cluster"),
-        RUNNING("running"),
-        SUCCESS("success"),
-        EXECUTION_ERROR("execution_error"),
-        SERVICE_ERROR("service_error"),
-        STOPPING("stopping"),
-        STOPPED("stopped");
+        @Value("starting")
+        STARTING,
+        @Value("validating_script")
+        VALIDATING_SCRIPT,
+        @Value("script_error")
+        SCRIPT_ERROR,
+        @Value("plan_error")
+        PLAN_ERROR,
+        @Value("starting_cluster")
+        STARTING_CLUSTER,
+        @Value("running")
+        RUNNING,
+        @Value("success")
+        SUCCESS,
+        @Value("execution_error")
+        EXECUTION_ERROR,
+        @Value("service_error")
+        SERVICE_ERROR,
+        @Value("stopping")
+        STOPPING,
+        @Value("stopped")
+        STOPPED;
 
-        private String statusString;
 
-        JobStatus(String statusString) {
-            this.statusString = statusString;
-        }
-
-        public String toString() {
-            return statusString;
-        }
-
-
-        public static JobStatus getEnum(String statusString) {
-            for (JobStatus s : values()) {
-                if (s.statusString.equalsIgnoreCase(statusString)) {
-                    return s;
-                }
-            }
-            throw new IllegalArgumentException();
-        }
     }
 
 }
