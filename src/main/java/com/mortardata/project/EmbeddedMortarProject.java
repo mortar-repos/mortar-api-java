@@ -294,7 +294,8 @@ public class EmbeddedMortarProject {
         
         File mortarProjectRemoteFile = new File(this.rootPath, MORTAR_PROJECT_REMOTE_FILENAME);
         if (!mortarProjectRemoteFile.exists()) {
-            throw new IOException("A " + MORTAR_PROJECT_REMOTE_FILENAME + " file must exist under the " + 
+            throw new IOException("A " + MORTAR_PROJECT_REMOTE_FILENAME + 
+                    " file must exist under the " + 
                     "project root. No file found at " + mortarProjectRemoteFile);
         }
         
