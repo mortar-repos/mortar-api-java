@@ -63,7 +63,8 @@ Integer clusterSize = 2;
 
 // run the job
 Jobs jobs = new Jobs(new API(email, apiKey));
-String jobId = jobs.postJobNewCluster(projectName, scriptName, codeVersion, clusterSize);
+JobRequest jobRequest = new JobRequest(projectName, scriptName, codeVersion, clusterSize);
+String jobId = jobs.postJob(jobRequest);
 
 // wait for job completion
 String finalJobStatus = jobs.blockUntilJobComplete(jobId);
