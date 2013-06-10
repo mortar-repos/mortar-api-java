@@ -110,7 +110,7 @@ public class Illustrates {
         public String describeId;
 
         @Key("status_code")
-        public String statusCode;
+        public TaskStatus statusCode;
 
         @Key("status_description")
         public String statusDescription;
