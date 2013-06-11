@@ -4,6 +4,8 @@
 
 The Mortar API for Java lets you interact with the [Mortar API](http://help.mortardata.com/reference/api/api_version_2), running jobs and querying their status.  It also lets you deploy Mortar project code to the Mortar service.
 
+[![Build Status](https://travis-ci.org/mortardata/mortar-api-java.png?branch=master)](https://travis-ci.org/mortardata/mortar-api-java)
+
 ## Installation
 
 TODO mavenized installation
