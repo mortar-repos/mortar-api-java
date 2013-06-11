@@ -23,6 +23,14 @@
     <developerConnection>scm:git:git@github.com:mortardata/mortar-api-java.git</developerConnection>
   </scm>
   <url>https://github.com/mortardata/mortar-api-java</url>
+  <developers>
+    <developer>
+      <email>info@mortardata.com</email>
+      <name>Mortar Data</name>
+      <url>http://www.mortardata.com/</url>
+      <id>mortardata</id>
+    </developer>
+  </developers>
   <build>
     <plugins>
       <plugin>
