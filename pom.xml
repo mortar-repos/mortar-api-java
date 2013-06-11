@@ -6,6 +6,10 @@
   <packaging>jar</packaging>
   <version>0.1</version>
   <name>Mortar API for Java</name>
+  <issueManagement>
+    <url>https://github.com/mortardata/mortar-api-java/issues</url>
+    <system>GitHub Issues</system>
+  </issueManagement>
   <licenses>
     <license>
       <name>The Apache Software License, Version 2.0</name>
@@ -15,6 +19,8 @@
   </licenses>
   <scm>
     <url>https://github.com/mortardata/mortar-api-java</url>
+    <connection>scm:git:git://github.com/mortardata/mortar-api-java.git</connection>
+    <developerConnection>scm:git:git@github.com:mortardata/mortar-api-java.git</developerConnection>
   </scm>
   <url>https://github.com/mortardata/mortar-api-java</url>
   <build>
@@ -78,6 +84,55 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
         <version>2.14.1</version>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <version>2.9</version>
+        <configuration> 
+          <outputDirectory>${project.build.directory}</outputDirectory>
+          <reportOutputDirectory>${project.reporting.outputDirectory}</reportOutputDirectory>
+          <destDir>.</destDir>
+          <show>public</show>
+        </configuration>
+        <executions>
+          <execution>
+            <id>attach-javadocs</id>
+            <phase>site</phase>
+            <goals>
+              <goal>aggregate</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>com.github.github</groupId>
+        <artifactId>site-maven-plugin</artifactId>
+        <version>0.8</version>
+        <configuration>
+          <message>Building site for ${project.version}</message>
+          <server>github</server>
+        </configuration>
+        <executions>
+          <execution>
+            <goals>
+              <goal>site</goal>
+            </goals>
+            <phase>site</phase>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-source-plugin</artifactId>
+        <version>2.2.1</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
     <finalName>${project.artifactId}-${project.version}</finalName>
