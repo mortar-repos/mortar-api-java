@@ -149,9 +149,9 @@
       <version>${project.http.version}</version>
     </dependency>
     <dependency>
-        <groupId>commons-io</groupId>
-        <artifactId>commons-io</artifactId>
-        <version>${project.commons-io.version}</version>
+      <groupId>commons-io</groupId>
+      <artifactId>commons-io</artifactId>
+      <version>${project.commons-io.version}</version>
     </dependency>
     <dependency>
       <groupId>org.eclipse.jgit</groupId>
@@ -186,7 +186,7 @@
       <artifactId>mockito-all</artifactId>
       <version>${project.mockito.version}</version>
       <scope>test</scope>
-</dependency>
+    </dependency>
   </dependencies>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
