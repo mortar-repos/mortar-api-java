@@ -15,7 +15,12 @@
  */
 package com.mortardata.api.v2;
 
+import com.google.api.client.util.GenericData;
+
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * TODO doc.
@@ -28,7 +33,7 @@ public class JobRequest {
     private int clusterSize;
     private boolean notifyOnJobFinish = true;
     private Clusters.ClusterType clusterType = Clusters.ClusterType.PERSISTENT;
-    private HashMap parameters = new HashMap();
+    private Map<String, String> parameters = new HashMap<String, String>();
     private boolean isControlScript = false;
     private String clusterId;
 
@@ -69,8 +74,8 @@ public class JobRequest {
     /**
      * TODO doc.
      */
-    public HashMap<String, Object> getArguments() {
-        HashMap<String, Object> arguments = new HashMap<String, Object>();
+    public GenericData getArguments() {
+        GenericData arguments = new GenericData();
         arguments.put("project_name", projectName);
         arguments.put("git_ref", gitRef);
         if (clusterId != null) {
@@ -79,7 +84,7 @@ public class JobRequest {
             arguments.put("cluster_type", clusterType.toString());
             arguments.put("cluster_size", clusterSize);
         }
-        arguments.put("parameters", parameters);
+        arguments.put("parameters", convertParameters());
         arguments.put("notify_on_job_finish", notifyOnJobFinish);
         if (isControlScript) {
             arguments.put("controlscript_name", scriptName);
@@ -87,6 +92,17 @@ public class JobRequest {
             arguments.put("pigscript_name", scriptName);
         }
         return arguments;
+    }
+
+    private List<Map<String, String>> convertParameters() {
+        List<Map<String, String>> params = new ArrayList<Map<String, String>>();
+        for (String s : parameters.keySet()) {
+            HashMap<String, String> valMap = new HashMap<String, String>();
+            valMap.put("name", s);
+            valMap.put("value", parameters.get(s));
+            params.add(valMap);
+        }
+        return params;
     }
 
     public boolean isNotifyOnJobFinish() {
@@ -105,11 +121,11 @@ public class JobRequest {
         this.clusterType = clusterType;
     }
 
-    public HashMap getParameters() {
+    public Map<String, String> getParameters() {
         return parameters;
     }
 
-    public void setParameters(HashMap parameters) {
+    public void setParameters(Map<String, String> parameters) {
         this.parameters = parameters;
     }
 
