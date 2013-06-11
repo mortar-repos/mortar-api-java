@@ -62,7 +62,7 @@ public class EmbeddedMortarProject {
     private String gitMirrorURL;
 
     
-    EmbeddedMortarProject(File rootPath, GitUtil gitUtil, String gitMirrorURL) {
+    public EmbeddedMortarProject(File rootPath, GitUtil gitUtil, String gitMirrorURL) {
         this.rootPath = rootPath;
         this.gitUtil = gitUtil;
         this.gitMirrorURL = gitMirrorURL;
