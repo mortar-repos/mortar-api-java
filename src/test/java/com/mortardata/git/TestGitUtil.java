@@ -18,10 +18,6 @@ package com.mortardata.git;
 import org.junit.Assert;
 import org.junit.Test;
 
-/**
- * TODO Doc
- *
- */
 public class TestGitUtil {
     
     @Test
