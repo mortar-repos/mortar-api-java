@@ -42,9 +42,9 @@ public class JobRequest {
      * Construct a JobRequest object for running a job on a new cluster
      *
      * @param projectName Mortar project name
-     * @param scriptName name of script to be run
-     * @param gitRef git branch to be run
-     * @param clusterSize size of new cluster
+     * @param scriptName name of script to be run (without path or extension)
+     * @param gitRef version of code (git hash or branch) to use
+     * @param clusterSize size of hadoop cluster to launch (number of nodes)
      */
     public JobRequest(String projectName, String scriptName, String gitRef, int clusterSize) {
         this.projectName = projectName;
@@ -57,8 +57,8 @@ public class JobRequest {
      * Construct a JobRequest object for running a job on an existing cluster
      *
      * @param projectName Mortar project name
-     * @param scriptName name of script to be run
-     * @param gitRef git branch to be run
+     * @param scriptName name of script to be run (without path or extension)
+     * @param gitRef version of code (git hash or branch) to use
      * @param clusterId id of existing cluster
      */
     public JobRequest(String projectName, String scriptName, String gitRef, String clusterId) {
@@ -112,14 +112,14 @@ public class JobRequest {
     }
 
     /**
-     * @return whether the user should be notified when the job is complete
+     * @return whether the user should be notified via email when the job is complete
      */
     public boolean isNotifyOnJobFinish() {
         return notifyOnJobFinish;
     }
 
     /**
-     * Set whether the user should be notified when the job is complete.  Default is true.
+     * Set whether the user should be notified via email when the job is complete.  Default is true.
      */
     public void setNotifyOnJobFinish(boolean notifyOnJobFinish) {
         this.notifyOnJobFinish = notifyOnJobFinish;
@@ -175,14 +175,14 @@ public class JobRequest {
     }
 
     /**
-     * @return number of nodes for cluster to be created to run this job
+     * @return size of hadoop cluster to launch (number of nodes), if launching new cluster
      */
     public int getClusterSize() {
         return clusterSize;
     }
 
     /**
-     * @return git branch to be used for code deploy
+     * @return version of code (git hash or branch) to use
      */
     public String getGitRef() {
         return gitRef;
@@ -196,7 +196,7 @@ public class JobRequest {
     }
 
     /**
-     * @return name of the project being run
+     * @return name of the Mortar project being run
      */
     public String getProjectName() {
         return projectName;

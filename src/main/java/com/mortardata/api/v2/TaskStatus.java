@@ -23,24 +23,63 @@ import com.google.api.client.util.Value;
  */
 public enum TaskStatus {
 
+    /**
+     * Submitted, pending execution.
+     */
     @Value
     QUEUED,
+
+    /**
+     * Pig server starting (happens on first request in session).
+     */
     @Value
     GATEWAY_STARTING,
+
+    /**
+     * Operation in progress.
+     */
     @Value
     PROGRESS,
+
+    /**
+     * Syntax error in pigscript (details in error_message field)
+     */
     @Value
     FAILURE,
+
+    /**
+     * Operation complete; results available if applicable
+     */
     @Value
     SUCCESS,
+
+    /**
+     * Operation terminated.
+     */
     @Value
     KILLED,
+
+    /**
+     * Illustrate compiling plan for Pig script.
+     */
     @Value("BUILDING_PLAN")
     ILLUSTRATE_BUILDING_PLAN,
+
+    /**
+     * Illustrate reading source data.
+     */
     @Value("READING_DATA")
     ILLUSTRATE_READING_DATA,
+
+    /**
+     * Illustrate pruning data to minimal result set.
+     */
     @Value("PRUNING_DATA")
     ILLUSTRATE_PRUNE_DATA,
+
+    /**
+     * Illustrate post-processing of result data.
+     */
     @Value("FINALIZE_RESULTS")
     ILLUSTRATE_FINALIZE_RESULTS;
 }

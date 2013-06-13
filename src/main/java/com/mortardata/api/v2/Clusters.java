@@ -192,49 +192,55 @@ public class Clusters {
     public enum ClusterStatus {
 
         /**
-         * Cluster request received, not yet starting.
+         * Initial state, pending launch.
          */
         @Value("pending")
         PENDING,
 
         /**
-         * Cluster is starting, not yet running.
+         * Cluster hardware is being started.
          */
         @Value("starting")
         STARTING,
 
         /**
-         * Cluster is starting but the user has requested that the cluster be shut down.
+         * Cluster is starting, but has been requested to be stopped as soon as possible.
          */
         @Value("starting_requested_stop")
         STARTING_REQUESTED_STOP,
 
         /**
-         * Cluster is running Mortar-specific actions necessary to make the cluster usable.
+         * Cluster software and packages being installed and started.
          */
         @Value("mortar_bootstrapping")
         MORTAR_BOOTSTRAPPING,
 
         /**
-         * Cluster is running and able to accept and run jobs.
+         * Cluster is ready for use.
          */
         @Value("running")
         RUNNING,
 
         /**
-         * Cluster is shutting down.
+         * Cluster is in the process of shutting down.
          */
         @Value("stopping")
         STOPPING,
 
         /**
-         * Cluster has shut down.
+         * Cluster logs are being copied to user bucket.
+         */
+        @Value("stopping_copying_logs")
+        STOPPING_COPYING_LOGS,
+
+        /**
+         * Cluster has been shut down.
          */
         @Value("destroyed")
         DESTROYED,
 
         /**
-         * An error occurred while starting the cluster, and the cluster failed to start.
+         * Cluster failed to start.
          */
         @Value("failed")
         FAILED

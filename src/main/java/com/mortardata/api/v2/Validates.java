@@ -22,14 +22,17 @@ import java.io.IOException;
 import java.util.HashMap;
 
 /**
- * TODO doc.
+ * Run and fetch validate requests from the Mortar API.
+ *
+ * @see <a href="http://help.mortardata.com/reference/api/api_version_2" target="_blank">
+ * http://help.mortardata.com/reference/api/api_version_2</a>
  */
 public class Validates {
 
     private API api;
 
     /**
-     * TODO doc.
+     * Construct a Validates V2 API.
      * @param api
      */
     public Validates(API api) {
@@ -37,13 +40,13 @@ public class Validates {
     }
 
     /**
-     * TODO doc.
+     * Run a Pig VALIDATE operation.
      *
-     * @param gitRef
-     * @param projectName
-     * @param pigScriptName
-     * @return describe_id
-     * @throws java.io.IOException
+     * @param gitRef version of code (git hash) to use
+     * @param projectName Mortar project to use
+     * @param pigScriptName Pigscript to use (without path or extension)
+     * @return describe_id ID of the describe that was requested
+     * @throws java.io.IOException if unable to run describe on API
      */
     public String postValidate(String gitRef, String projectName, String pigScriptName)
             throws IOException {
@@ -57,11 +60,11 @@ public class Validates {
     }
 
     /**
-     * TODO doc.
+     * Get the results of a Pig VALIDATE operation.
      *
-     * @param validateId
-     * @return
-     * @throws IOException
+     * @param validateId ID of the describe.
+     * @return requested ValidateResult
+     * @throws IOException if describe does not exist or unable to fetch from the API
      */
     public ValidateResult getValidate(String validateId) throws IOException {
         HttpRequest request = this.api.buildHttpGetRequest("validates/" + validateId);
@@ -69,25 +72,56 @@ public class Validates {
     }
 
     /**
-     * TODO doc.
+     * Result of a Pig VALIDATE
      */
     public static class ValidateResult {
+
+        /**
+         * Name of the Mortar project for the validate.
+         */
         @Key("project_name")
         public String projectName;
 
+        /**
+         * Git hash or branch at which validate was run.
+         */
         @Key("git_ref")
         public String gitRef;
 
+        /**
+         * Name of the script that was validated.
+         */
         @Key("script_name")
         public String scriptName;
 
+        /**
+         * ID of the validate
+         */
         @Key("validate_id")
         public String validateId;
 
+        /**
+         * Validate status code.
+         */
         @Key("status_code")
         public TaskStatus statusCode;
 
+        /**
+         * Full description of validate status.
+         */
         @Key("status_description")
         public String statusDescription;
+
+        @Override
+        public String toString() {
+            return "ValidateResult [" +
+                    "projectName='" + projectName + '\'' +
+                    ", gitRef='" + gitRef + '\'' +
+                    ", scriptName='" + scriptName + '\'' +
+                    ", validateId='" + validateId + '\'' +
+                    ", statusCode=" + statusCode +
+                    ", statusDescription='" + statusDescription + '\'' +
+                    ']';
+        }
     }
 }

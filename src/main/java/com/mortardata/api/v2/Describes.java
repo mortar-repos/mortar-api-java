@@ -24,29 +24,33 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * TODO doc.
+ * Run and fetch describe requests from the Mortar API.
+ *
+ * @see <a href="http://help.mortardata.com/reference/api/api_version_2" target="_blank">
+ * http://help.mortardata.com/reference/api/api_version_2</a>
  */
 public class Describes {
 
     private API api;
 
     /**
-     * TODO doc.
-     * @param api
+     * Construct a Describes V2 API.
+     *
+     * @param api API client
      */
     public Describes(API api) {
         this.api = api;
     }
 
     /**
-     * TODO doc.
+     * Run a Pig DESCRIBE operation.
      *
-     * @param alias
-     * @param gitRef
-     * @param projectName
-     * @param pigScriptName
-     * @return describe_id
-     * @throws IOException
+     * @param alias Pig alias to describe
+     * @param gitRef version of code (git hash) to use
+     * @param projectName Mortar project to use
+     * @param pigScriptName Pigscript to use (without path or extension)
+     * @return describe_id ID of the describe that was requested
+     * @throws IOException if unable to run describe on API
      */
     public String postDescribe(String alias, String gitRef, String projectName,
                                String pigScriptName) throws IOException {
@@ -61,11 +65,11 @@ public class Describes {
     }
 
     /**
-     * TODO doc.
+     * Get the results of a Pig DESCRIBE operation.
      *
-     * @param describeId
-     * @return
-     * @throws IOException
+     * @param describeId ID of the describe
+     * @return requested DescribeResult
+     * @throws IOException if describe does not exist or unable to fetch from the API
      */
     public DescribeResult getDescribe(String describeId) throws IOException {
         HttpRequest request = this.api.buildHttpGetRequest("describes/" + describeId);
@@ -73,12 +77,12 @@ public class Describes {
     }
 
     /**
-     * TODO doc.
+     * Get the results of a Pig DESCRIBE operation.
      *
-     * @param describeId
-     * @param excludeResult
-     * @return
-     * @throws IOException
+     * @param describeId ID of the describe
+     * @param excludeResult whether to exclude the result field (default: false)
+     * @return requested DescribeResult
+     * @throws IOException if describe does not exist or unable to fetch from the API
      */
     public DescribeResult getDescribe(String describeId, boolean excludeResult) throws IOException {
         HttpRequest request = this.api.buildHttpGetRequest("describes/" + describeId
@@ -88,49 +92,78 @@ public class Describes {
 
 
     /**
-     * TODO doc.
+     * Result of a Pig DESCRIBE
      */
     public static class DescribeResult {
+
+        /**
+         * Name of the Mortar project for the describe.
+         */
         @Key("project_name")
         public String projectName;
 
+        /**
+         * Pig alias described.
+         */
         @Key("alias")
         public String alias;
 
+        /**
+         * Git hash or branch at which describe was run.
+         */
         @Key("git_ref")
         public String gitRef;
 
+        /**
+         * Name of the script that was described.
+         */
         @Key("script_name")
         public String scriptName;
 
+        /**
+         * ID of the describe
+         */
         @Key("describe_id")
         public String describeId;
 
+        /**
+         * Describe status code.
+         */
         @Key("status_code")
         public TaskStatus statusCode;
 
+        /**
+         * Full description of describe status.
+         */
         @Key("status_description")
         public String statusDescription;
 
+        /**
+         * URL to view describe results
+         */
         @Key("web_result_url")
         public String webResultUrl;
 
+        /**
+         * Describe results
+         */
         @Key("result")
-        public Map<String, List<Table>> result;
-    }
+        public Map<String, Object> result;
 
-    /**
-     * TODO doc.
-     */
-    public static class Table {
-        @Key("alias")
-        public String alias;
-
-        @Key("fields")
-        public List<String> fields;
-
-        @Key("op")
-        public String op;
+        @Override
+        public String toString() {
+            return "DescribeResult [" +
+                    "projectName='" + projectName + '\'' +
+                    ", alias='" + alias + '\'' +
+                    ", gitRef='" + gitRef + '\'' +
+                    ", scriptName='" + scriptName + '\'' +
+                    ", describeId='" + describeId + '\'' +
+                    ", statusCode=" + statusCode +
+                    ", statusDescription='" + statusDescription + '\'' +
+                    ", webResultUrl='" + webResultUrl + '\'' +
+                    ", result=" + result +
+                    ']';
+        }
     }
 }
 

@@ -23,30 +23,33 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * TODO doc.
+ * Run and fetch illustrate requests from the Mortar API.
+ *
+ * @see <a href="http://help.mortardata.com/reference/api/api_version_2" target="_blank">
+ * http://help.mortardata.com/reference/api/api_version_2</a>
  */
 public class Illustrates {
 
     private API api;
 
     /**
-     * TODO doc.
-     * @param api
+     * Construct an Illustrates V2 API.
+     *
+     * @param api API client
      */
     public Illustrates(API api) {
         this.api = api;
     }
 
-
     /**
-     * TODO doc.
+     * Run a Pig ILLUSTRATE operation.
      *
-     * @param alias
-     * @param gitRef
-     * @param projectName
-     * @param pigScriptName
-     * @return describe_id
-     * @throws java.io.IOException
+     * @param alias Pig alias to illustrate (optional: if not provided, illustrate entire script)
+     * @param gitRef version of code (git hash) to use
+     * @param projectName Mortar project to use
+     * @param pigScriptName Pigscript to use (without path or extension)
+     * @return illustrate_id ID of the illustrate that was requested
+     * @throws java.io.IOException if unable to run illustrate on API
      */
     public String postIllustrate(String alias, String gitRef, String projectName,
                                  String pigScriptName)
@@ -64,11 +67,11 @@ public class Illustrates {
     }
 
     /**
-     * TODO doc.
+     * Get the results of a Pig ILLUSTRATE operation.
      *
-     * @param illustrateId
-     * @return
-     * @throws IOException
+     * @param illustrateId ID of the illustrate
+     * @return requested IllustrateResult
+     * @throws IOException if illustrate does not exist or unable to fetch from the API
      */
     public IllustrateResult getIllustrate(String illustrateId) throws IOException {
         HttpRequest request = this.api.buildHttpGetRequest("illustrates/" + illustrateId);
@@ -76,12 +79,12 @@ public class Illustrates {
     }
 
     /**
-     * TODO doc.
+     * Get the results of a Pig ILLUSTRATE operation.
      *
-     * @param illustrateId
-     * @param excludeResult
-     * @return
-     * @throws IOException
+     * @param illustrateId ID of the illustrate
+     * @param excludeResult whether to exclude the result field (default: false)
+     * @return requested IllustrateResult
+     * @throws IOException if illustrate does not exist or unable to fetch from the API
      */
     public IllustrateResult getIllustrate(String illustrateId, boolean excludeResult)
             throws IOException {
@@ -91,35 +94,78 @@ public class Illustrates {
     }
 
     /**
-     * TODO doc.
+     * Result of a Pig ILLUSTRATE
      */
     public static class IllustrateResult {
+
+        /**
+         * Name of the Mortar project for the illustrate.
+         */
         @Key("project_name")
         public String projectName;
 
+        /**
+         * Pig alias illustrated, or null if entire script illustrated.
+         */
         @Key("alias")
         public String alias;
 
+        /**
+         * Git hash or branch at which illustrate was run.
+         */
         @Key("git_ref")
         public String gitRef;
 
+        /**
+         * Name of the script that was illustrated.
+         */
         @Key("script_name")
         public String scriptName;
 
+        /**
+         * ID of the illustrate.
+         */
         @Key("illustrate_id")
         public String describeId;
 
+        /**
+         * Illustrate status code.
+         */
         @Key("status_code")
         public TaskStatus statusCode;
 
+        /**
+         * Full description of illustrate status.
+         */
         @Key("status_description")
         public String statusDescription;
 
+        /**
+         * URL to view illustrate results
+         */
         @Key("web_result_url")
         public String webResultUrl;
 
+        /**
+         * Illustrate results.
+         */
         @Key("result")
         public Map<String, Object> result;
+
+        @Override
+        public String toString() {
+            return "IllustrateResult [" +
+                    "projectName='" + projectName + '\'' +
+                    ", alias='" + alias + '\'' +
+                    ", gitRef='" + gitRef + '\'' +
+                    ", scriptName='" + scriptName + '\'' +
+                    ", describeId='" + describeId + '\'' +
+                    ", statusCode=" + statusCode +
+                    ", statusDescription='" + statusDescription + '\'' +
+                    ", webResultUrl='" + webResultUrl + '\'' +
+                    ", result=" + result +
+                    ']';
+        }
     }
 
 
