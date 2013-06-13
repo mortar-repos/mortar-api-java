@@ -31,11 +31,16 @@ import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.api.client.util.Objects;
 import com.mortardata.git.GitUtil;
 import com.mortardata.util.Files;
 
 /**
- * TODO doc.
+ * Tools for deploying Embedded Mortar Projects to the
+ * Mortar Service (via github).
+ * 
+ * @see <a href="http://bit.ly/11Ha0iY" target="_blank">
+ * Using Your Own Source Control</a>
  */
 public class EmbeddedMortarProject {
     
@@ -60,67 +65,85 @@ public class EmbeddedMortarProject {
     private GitUtil gitUtil;
 
     private String gitMirrorURL;
-
     
+    /**
+     * Construct a representation of an Embedded Mortar Project.
+     * 
+     * @param rootPath Path on the file system where the project code lives
+     */
+    public EmbeddedMortarProject(File rootPath) {
+        this(rootPath, new GitUtil(), null);
+    }
+
+    /**
+     * Construct a representation of an Embedded Mortar Project.
+     * 
+     * @param rootPath Path on the file system where the project code lives
+     * @param gitUtil Git utility class
+     * @param gitMirrorURL URL of the Mortar private mirror repository
+     * (if null, looked up in the .mortar-project-remote file) 
+     */
     public EmbeddedMortarProject(File rootPath, GitUtil gitUtil, String gitMirrorURL) {
         this.rootPath = rootPath;
         this.gitUtil = gitUtil;
         this.gitMirrorURL = gitMirrorURL;
     }
-    
+
     /**
+     * Deploy the code in this EmbeddedMortarProject to Mortar onto 
+     * the master branch.
      * 
-     * @param rootPath path to root directory of embedded mortar project 
-     */
-    public EmbeddedMortarProject(File rootPath) {
-        this(rootPath, new GitUtil(), null);
-    }
-    
-    /**
-     * Deploy the code in this EmbeddedMortarProject to Mortar.  
-     * Deploys to the 'master' branch in mortar. 
-     * 
-     * @param githubUsername Username for github user associated with mortar 
-     * account (used to sync code to backing mortar github repo)
-     * @param githubPassword Password for github user associated with mortar 
-     * account (used to sync code to backing mortar github repo)
-     * @throws IOException if unable to sync code
+     * @param githubUsername Username for github user associated with Mortar 
+     * account (used to sync code to backing Mortar github repo)
+     * @param githubPassword Password for github user associated with Mortar 
+     * account (used to sync code to backing Mortar github repo)
+     * @throws IOException if unable to sync code to Mortar
      */
     public void deployToMortar(String githubUsername, String githubPassword) throws IOException {
         deployToMortar(githubUsername, githubPassword, DEPLOY_TARGET_BRANCH_DEFAULT);
     }
     
     /**
-     * Deploy the code in this EmbeddedMortarProject to Mortar.
+     * Deploy the code in this EmbeddedMortarProject to Mortar onto 
+     * a specified branch.
      * 
-     * @param githubUsername Username for github user associated with mortar 
-     * account (used to sync code to mortar's mirror github repo)
-     * @param githubPassword Password for github user associated with mortar 
-     * account (used to sync code to mortar's mirror github repo)
+     * @param githubUsername Username for github user associated with Mortar 
+     * account (used to sync code to Mortar's mirror github repo)
+     * @param githubPassword Password for github user associated with Mortar 
+     * account (used to sync code to Mortar's mirror github repo)
      * @param targetBranch target branch to which deployment should go in 
-     * mortar's mirror github repo 
+     * Mortar's mirror github repo
      * @throws IOException
      */
-    public void deployToMortar(String githubUsername, String githubPassword, String targetBranch) 
+    public void deployToMortar(String githubUsername, String githubPassword, String targetBranch)
             throws IOException {
         deployToMortar(githubUsername, githubPassword, targetBranch, 
                 Files.createTempDirectory());
     }
     
     /**
-     * Deploy the code in this EmbeddedMortarProject to Mortar.
+     * Get the URL of the backing git mirror for this EmbeddedMortarProject.
      * 
-     * @param githubUsername Username for github user associated with mortar
-     * account (used to sync code to mortar's mirror github repo)
-     * @param githubPassword Password for github user associated with mortar
-     *  account (used to sync code to mortar's mirror github repo)
-     * @param targetBranch target branch to which deployment should go in 
-     * mortar's mirror github repo 
-     * @param mirrorPath Local path to store mortar mirror 
-     * github repo (must not exist or be empty) 
-     * @throws IOException 
+     * @return https URL of git mirror  
+     * @throws IOException if unable to load git mirror URL from .mortar-project-remote 
      */
-    public void deployToMortar(String githubUsername, String githubPassword, 
+    public String getGitMirrorURL() throws IOException {
+        if (this.gitMirrorURL == null) {
+            this.gitMirrorURL = loadGitMirrorURL();
+        }
+        return this.gitMirrorURL;
+    }
+    
+    /**
+     * Get the embedded project manifest file.
+     * 
+     * @return
+     */
+    public File getManifestFile() {
+        return new File(this.rootPath, MORTAR_PROJECT_MANIFEST_FILENAME);
+    }
+    
+    void deployToMortar(String githubUsername, String githubPassword, 
             String targetBranch, File mirrorPath) throws IOException {
         // validate mirrorPath
         if (!mirrorPath.exists()) {
@@ -140,7 +163,9 @@ public class EmbeddedMortarProject {
                         "found contents in " + mirrorPath);
             }
         }
-
+        
+        logger.debug("Using temporary mirror path " + mirrorPath);
+        
         CredentialsProvider cp = new UsernamePasswordCredentialsProvider(
                 githubUsername, githubPassword);
         try {
@@ -251,41 +276,18 @@ public class EmbeddedMortarProject {
             .call();
     }
     
-    private void syncProjectMirrorWithMortarGit(Git localBackingGitRepo, CredentialsProvider cp, 
+    void syncProjectMirrorWithMortarGit(Git localBackingGitRepo, CredentialsProvider cp, 
             String targetBranch) throws GitAPIException, IOException {
         // push
-        logger.info("Pushing updated code in mortar github mirror repo on target branch " + 
-                targetBranch + " to mortar github mirror repo " + getGitMirrorURL());
+        logger.info("Pushing updated code to Mortar github mirror repo " + getGitMirrorURL() 
+                + " on target branch " + targetBranch);
         localBackingGitRepo.push()
             .setRemote(getGitMirrorURL())
             .setCredentialsProvider(cp)
             .setRefSpecs(new RefSpec(targetBranch))
             .call();
     }
-    
-    /**
-     * Get the URL of the backing git mirror for this embedded mortar project.
-     * 
-     * @return https URL of git mirror  
-     * @throws IOException if unable to load git mirror URL from .mortar-project-remote 
-     */
-    public String getGitMirrorURL() throws IOException {
-        if (this.gitMirrorURL == null) {
-            this.gitMirrorURL = loadGitMirrorURL();
-        }
-        return this.gitMirrorURL;
-    }
-    
-    /**
-     * Get the embedded project manifest file.
-     * 
-     * @return
-     */
-    public File getManifestFile() {
-        return new File(this.rootPath, MORTAR_PROJECT_MANIFEST_FILENAME);
-    }
-    
-    
+   
     String loadGitMirrorURL() throws IOException {
         if (!((this.rootPath != null) && this.rootPath.exists() && this.rootPath.isDirectory())) {
             throw new IOException("Project root path must be an existing directory.  Got: " + 
@@ -331,17 +333,11 @@ public class EmbeddedMortarProject {
         return manifestFilesAndDirs;
     }
 
-    /**
-     * @param args
-     * @throws IOException 
-     */
-    public static void main(String[] args) throws IOException {
-        EmbeddedMortarProject p = 
-                new EmbeddedMortarProject(
-                        new File(
-                                "/Users/ddaniels/projects/prod/" +
-                                "my-sample-project/ddaniels_embedded_project"));
-        p.deployToMortar("XXXXXXXXXX", "XXXXXXXXXX", "foobar");
+    @Override
+    public String toString() {
+        return Objects.toStringHelper(this)
+                .add("rootPath", rootPath)
+                .toString();
     }
 
 }
