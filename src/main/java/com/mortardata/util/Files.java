@@ -16,14 +16,11 @@
 package com.mortardata.util;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
 /**
- * File manipulation utilities we'd ordinarily use from guava,
- * but implemented in simple form here to avoid guava dependency.
- *
+ * File manipulation utilities.
  */
 public class Files {
     
@@ -31,7 +28,7 @@ public class Files {
      * Create a temporary directory.
      * 
      * @return new temporary directory
-     * @throws IOException
+     * @throws IOException if unable to make temporary directory
      */
     public static File createTempDirectory() throws IOException {
         // create a file
@@ -50,6 +47,13 @@ public class Files {
         return temp;
     }
     
+    /**
+     * Is the provided directory empty?
+     * 
+     * @param directory Directory to check
+     * @return whether directory is empty
+     * @throws IOException if directory does not exist
+     */
     public static boolean isEmpty(File directory) throws IOException {
         String[] contents = directory.list();
         if (contents == null) {
@@ -58,7 +62,14 @@ public class Files {
         return contents.length == 0;
     }
     
-    public static void touch(File file) throws FileNotFoundException, IOException {
+    /**
+     * Create a zero-byte file at provided path if one doesn't
+     * already exist.
+     * 
+     * @param file Location for file to be created
+     * @throws IOException if file cannot be created
+     */
+    public static void touch(File file) throws IOException {
         new FileOutputStream(file).close();
     }
     
