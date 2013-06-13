@@ -31,14 +31,18 @@ import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.JsonObjectParser;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.client.util.ExponentialBackOff;
+import com.google.api.client.util.Objects;
 
 /**
- * TODO doc.
+ * Provides the client for accessing the Mortar v2 API.
+ * 
+ * @see <a href="http://help.mortardata.com/reference/api/api_version_2" target="_blank">
+ * http://help.mortardata.com/reference/api/api_version_2</a>
  */
 public class API {
 
-    private static final String SCHEME = "https";
-    private static final String HOST = "app.mortardata.com";
+    private static final String DEFAULT_SCHEME = "https";
+    private static final String DEFAULT_HOST = "api.mortardata.com";
     
     private static final HttpTransport HTTP_TRANSPORT = new NetHttpTransport();
     private static final JsonFactory JSON_FACTORY = new JacksonFactory();
@@ -49,10 +53,24 @@ public class API {
     private String scheme;
     private String host;
     
+    /**
+     * Constructs a new API client to invoke methods on the Mortar V2 API.
+     * 
+     * @param email Email associated with your Mortar user
+     * @param apiKey API key for your Mortar user
+     */
     public API(String email, String apiKey) {
-        this(email, apiKey, API.SCHEME, API.HOST);
+        this(email, apiKey, API.DEFAULT_SCHEME, API.DEFAULT_HOST);
     }
     
+    /**
+     * Constructs a new API client for custom API host and scheme.
+     * 
+     * @param email Email associated with your Mortar user
+     * @param apiKey Email associated with your Mortar user
+     * @param scheme http or https
+     * @param host API host (e.g. api.mortardata.com) 
+     */
     public API(String email, String apiKey, String scheme, String host) {
         this.email = email;
         this.apiKey = apiKey;
@@ -95,20 +113,11 @@ public class API {
         return this.scheme + "://" + this.host + "/v2/" + path;
     }
     
-    /**
-     * @param args
-     * @throws IOException 
-     */
-    public static void main(String[] args) throws IOException {
-        System.out.println("Hello world!");
-        API api = new API("XXXXX", "XXXXXX");
-        Jobs.JobsList jobsList = new Jobs(api).getJobs();
-        System.out.println("Output:\n" + jobsList.jobCount);
-        for (Jobs.Job job : jobsList.jobs) {
-            System.out.println("Job: " + job.scriptName + "," +  job.statusCode + "," + 
-                    job.statusDescription +  "," + job.scriptParameters + "," + job.gitRef + "," + 
-                    job.startTimestamp); 
-        }
+    @Override
+    public String toString() {
+        return Objects.toStringHelper(this)
+                .add("email", this.email)
+                .toString();
     }
 
 }
