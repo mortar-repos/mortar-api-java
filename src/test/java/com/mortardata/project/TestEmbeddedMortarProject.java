@@ -109,8 +109,7 @@ public class TestEmbeddedMortarProject extends RepositoryTestCase {
         when(pushMock.setRefSpecs(any(RefSpec.class))).thenReturn(pushMock);
 
         String commiter = "fake_committer";
-        EmbeddedMortarProject e = new EmbeddedMortarProject(this.rootPath,
-                new GitUtil(), this.remoteURLHttps);
+        EmbeddedMortarProject e = new EmbeddedMortarProject(this.rootPath, this.remoteURLHttps);
         e.setupGitMirror(gitSpy, this.fakeCP, commiter);
 
         // ensure that we pushed to the remote URL
@@ -128,8 +127,7 @@ public class TestEmbeddedMortarProject extends RepositoryTestCase {
     public void testSyncEmbeddedProjectWithMirrorMissingManifest()
             throws IOException, GitAPIException {
 
-        EmbeddedMortarProject e = new EmbeddedMortarProject(this.rootPath,
-                new GitUtil(), this.remoteURLHttps);
+        EmbeddedMortarProject e = new EmbeddedMortarProject(this.rootPath, this.remoteURLHttps);
         try {
             e.syncEmbeddedProjectWithMirror(this.git, this.fakeCP, "master",
                     "fake_committer");
@@ -142,7 +140,7 @@ public class TestEmbeddedMortarProject extends RepositoryTestCase {
     @Test
     public void testSyncEmbeddedProjectWithMirror() throws IOException, GitAPIException {
         
-        EmbeddedMortarProject e = new EmbeddedMortarProject(this.rootPath, new GitUtil(), this.remoteURLHttps);
+        EmbeddedMortarProject e = new EmbeddedMortarProject(this.rootPath, this.remoteURLHttps);
         // write a project manifest
         String[] manifestDirs = {"pigscripts", "controlscripts", "udfs", "fixtures"};
         writeManifestFile(manifestDirs);
@@ -181,7 +179,7 @@ public class TestEmbeddedMortarProject extends RepositoryTestCase {
 
     @Test
     public void testSyncEmbeddedProjectWithMirrorOnNewBranch() throws IOException, GitAPIException {
-        EmbeddedMortarProject e = new EmbeddedMortarProject(this.rootPath, new GitUtil(), this.remoteURLHttps);
+        EmbeddedMortarProject e = new EmbeddedMortarProject(this.rootPath, this.remoteURLHttps);
         // write a project manifest
         String[] manifestDirs = {"pigscripts", "controlscripts", "udfs", "fixtures"};
         writeManifestFile(manifestDirs);
@@ -205,7 +203,7 @@ public class TestEmbeddedMortarProject extends RepositoryTestCase {
     
     @Test
     public void testSyncEmbeddedProjectWithMirrorUsesManifest() throws IOException, GitAPIException {
-        EmbeddedMortarProject e = new EmbeddedMortarProject(this.rootPath, new GitUtil(), this.remoteURLHttps);
+        EmbeddedMortarProject e = new EmbeddedMortarProject(this.rootPath, this.remoteURLHttps);
         // write a project manifest
         String[] manifestDirs = {"pigscripts", "controlscripts", "udfs", "fixtures"};
         writeManifestFile(manifestDirs);

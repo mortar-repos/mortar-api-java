@@ -71,20 +71,19 @@ public class EmbeddedMortarProject {
      * @param rootPath Path on the file system where the project code lives
      */
     public EmbeddedMortarProject(File rootPath) {
-        this(rootPath, new GitUtil(), null);
+        this(rootPath, null);
     }
 
     /**
      * Construct a representation of an Embedded Mortar Project.
      * 
      * @param rootPath Path on the file system where the project code lives
-     * @param gitUtil Git utility class
      * @param gitMirrorURL URL of the Mortar private mirror repository
      * (if null, looked up in the .mortar-project-remote file) 
      */
-    public EmbeddedMortarProject(File rootPath, GitUtil gitUtil, String gitMirrorURL) {
+    EmbeddedMortarProject(File rootPath, String gitMirrorURL) {
         this.rootPath = rootPath;
-        this.gitUtil = gitUtil;
+        this.gitUtil = new GitUtil();
         this.gitMirrorURL = gitMirrorURL;
     }
 
