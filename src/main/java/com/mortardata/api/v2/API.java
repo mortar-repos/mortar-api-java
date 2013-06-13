@@ -73,21 +73,21 @@ public class API {
             }
           });
     }
-    public HttpRequest buildHttpGetRequest(String path) throws IOException {
+    HttpRequest buildHttpGetRequest(String path) throws IOException {
         return requestFactory.buildGetRequest(new GenericUrl(getURLString(path)));
     }
 
-    public HttpRequest buildHttpPostRequest(String path, Object data) throws IOException {
+    HttpRequest buildHttpPostRequest(String path, Object data) throws IOException {
         HttpContent postContent = new JsonHttpContent(JSON_FACTORY, data); 
         return requestFactory.buildPostRequest(new GenericUrl(getURLString(path)), postContent);
     }
 
-    public HttpRequest buildHttpPutRequest(String path, Object data) throws IOException {
+    HttpRequest buildHttpPutRequest(String path, Object data) throws IOException {
         HttpContent postContent = new JsonHttpContent(JSON_FACTORY, data); 
         return requestFactory.buildPutRequest(new GenericUrl(getURLString(path)), postContent);
     }
 
-    public HttpRequest buildHttpDeleteRequest(String path) throws IOException {
+    HttpRequest buildHttpDeleteRequest(String path) throws IOException {
         return requestFactory.buildDeleteRequest(new GenericUrl(getURLString(path)));
     }
     
