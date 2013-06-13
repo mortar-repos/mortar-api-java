@@ -191,6 +191,13 @@ public class Jobs {
          */
         @Key
         public List<Jobs.Job> jobs;
+
+        @Override
+        public String toString() {
+            return "JobsList [jobs=" + jobs + "]";
+        }
+        
+        
     }
 
     /**
@@ -283,7 +290,20 @@ public class Jobs {
          */
         @Key("stop_timestamp")
         public String stopTimestamp;
-    
+
+        @Override
+        public String toString() {
+            return "Job [statusCode=" + statusCode + ", statusDescription="
+                    + statusDescription + ", scriptName=" + scriptName
+                    + ", pigscriptName=" + pigscriptName + ", clusterId="
+                    + clusterId + ", error=" + error + ", note=" + note
+                    + ", progress=" + progress + ", scriptType=" + scriptType
+                    + ", projectName=" + projectName + ", scriptParameters="
+                    + scriptParameters + ", gitRef=" + gitRef
+                    + ", startTimestamp=" + startTimestamp + ", stopTimestamp="
+                    + stopTimestamp + "]";
+        }
+        
     }
 
     /**
