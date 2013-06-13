@@ -36,10 +36,10 @@ public class GitUtil {
     /**
      * Get all branches in a git repo.
      * 
-     * @param git Git repo
+     * @param git Git repository
      * 
-     * @return List<Ref> all branches
-     * @throws GitAPIException
+     * @return List<Ref> all branches in the repo
+     * @throws GitAPIException if error running git command
      */
     public List<Ref> getBranches(Git git) throws GitAPIException {
         return git.branchList()
@@ -50,10 +50,9 @@ public class GitUtil {
     /**
      * Checkout a branch, tracking remote branch if it exists.
      *  
-     * @param embeddedMortarProject
-     * @param git
-     * @param branch
-     * @throws GitAPIException
+     * @param git Git repository
+     * @param branch Name of branch to checkout
+     * @throws GitAPIException if error running git command
      */
     public void checkout(Git git, String branch) throws GitAPIException {
         List<Ref> branches = getBranches(git);
@@ -90,8 +89,8 @@ public class GitUtil {
     /**
      * Convert an SSH-style github URL to an https-style URL.
      * 
-     * @param githubSSHURL
-     * @return
+     * @param githubSSHURL URL in SSH format (e.g. git@github.com:mortardata/mortar.git)
+     * @return URL converted to HTTPS format (e.g. https://github.com/mortardata/mortar.git)
      */
     public String convertGithubSshURLToHttpsURL(String githubSSHURL) {
         // "git@github.com:organization/repo.git"
