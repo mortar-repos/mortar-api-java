@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * TODO doc.
+ * Represents the set of arguments needed to request a job run from the Mortar API
  */
 public class JobRequest {
 
@@ -39,13 +39,12 @@ public class JobRequest {
 
 
     /**
-     * TODO doc.
+     * Construct a JobRequest object for running a job on a new cluster
      *
-     * @param projectName
-     * @param scriptName
-     * @param gitRef
-     * @param clusterSize
-     * @return
+     * @param projectName Mortar project name
+     * @param scriptName name of script to be run
+     * @param gitRef git branch to be run
+     * @param clusterSize size of new cluster
      */
     public JobRequest(String projectName, String scriptName, String gitRef, int clusterSize) {
         this.projectName = projectName;
@@ -55,13 +54,12 @@ public class JobRequest {
     }
 
     /**
-     * TODO doc.
+     * Construct a JobRequest object for running a job on an existing cluster
      *
-     * @param projectName
-     * @param scriptName
-     * @param gitRef
-     * @param clusterId
-     * @return
+     * @param projectName Mortar project name
+     * @param scriptName name of script to be run
+     * @param gitRef git branch to be run
+     * @param clusterId id of existing cluster
      */
     public JobRequest(String projectName, String scriptName, String gitRef, String clusterId) {
         this.projectName = projectName;
@@ -72,7 +70,9 @@ public class JobRequest {
 
 
     /**
-     * TODO doc.
+     * Collect all job arguments into a form compatible with the Mortar API
+     *
+     * @returns GenericData object populated with all job run arguments
      */
     public GenericData getArguments() {
         GenericData arguments = new GenericData();
@@ -94,6 +94,12 @@ public class JobRequest {
         return arguments;
     }
 
+    /**
+     * For all elements of parameters, put them in a form compatible with the Mortar API
+     *
+     * @return List of Map objects with "name" as the key for the parameter name, and "value"
+     * as the key for the parameter value.
+     */
     private List<Map<String, String>> convertParameters() {
         List<Map<String, String>> params = new ArrayList<Map<String, String>>();
         for (String s : parameters.keySet()) {
@@ -105,55 +111,109 @@ public class JobRequest {
         return params;
     }
 
+    /**
+     * @return whether the user should be notified when the job is complete
+     */
     public boolean isNotifyOnJobFinish() {
         return notifyOnJobFinish;
     }
 
+    /**
+     * Set whether the user should be notified when the job is complete.  Default is true.
+     */
     public void setNotifyOnJobFinish(boolean notifyOnJobFinish) {
         this.notifyOnJobFinish = notifyOnJobFinish;
     }
 
+    /**
+     * @return cluster type requested for the job, if job is requesting a new cluster
+     */
     public Clusters.ClusterType getClusterType() {
         return clusterType;
     }
 
+    /**
+     * Set cluster type if starting a new cluster.  Default is PERSISTENT.
+     */
     public void setClusterType(Clusters.ClusterType clusterType) {
         this.clusterType = clusterType;
     }
 
+    /**
+     * @return Parameters for running the script
+     */
     public Map<String, String> getParameters() {
         return parameters;
     }
 
+    /**
+     * Set parameters needed for running the script.
+     */
     public void setParameters(Map<String, String> parameters) {
         this.parameters = parameters;
     }
 
+    /**
+     * @return Whether the named script is a control script
+     */
     public boolean isControlScript() {
         return isControlScript;
     }
 
+    /**
+     * Set whether the named script is a control script.  Default is false.
+     */
     public void setControlScript(boolean controlScript) {
         isControlScript = controlScript;
     }
 
+    /**
+     * @return cluster id of cluster for the job to run on, if job is using existing cluster
+     */
     public String getClusterId() {
         return clusterId;
     }
 
+    /**
+     * @return number of nodes for cluster to be created to run this job
+     */
     public int getClusterSize() {
         return clusterSize;
     }
 
+    /**
+     * @return git branch to be used for code deploy
+     */
     public String getGitRef() {
         return gitRef;
     }
 
+    /**
+     * @return name of the script to be run
+     */
     public String getScriptName() {
         return scriptName;
     }
 
+    /**
+     * @return name of the project being run
+     */
     public String getProjectName() {
         return projectName;
+    }
+
+    @Override
+    public String toString() {
+        return "JobRequest [" +
+                "projectName='" + projectName + '\'' +
+                ", scriptName='" + scriptName + '\'' +
+                ", gitRef='" + gitRef + '\'' +
+                ", clusterSize=" + clusterSize +
+                ", notifyOnJobFinish=" + notifyOnJobFinish +
+                ", clusterType=" + clusterType +
+                ", parameters=" + parameters +
+                ", isControlScript=" + isControlScript +
+                ", clusterId='" + clusterId + '\'' +
+                ']';
     }
 }

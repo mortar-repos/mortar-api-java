@@ -24,21 +24,29 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * TODO doc.
+ * View and stop clusters from the Mortar API
+ *
+ * @see <a href="http://help.mortardata.com/reference/api/api_version_2" target="_blank">
+ * http://help.mortardata.com/reference/api/api_version_2</a>
  */
 public class Clusters {
 
     private API api;
 
+    /**
+     * Construct a Clusters V2 API
+     *
+     * @param api API client
+     */
     public Clusters(API api) {
         this.api = api;
     }
 
     /**
-     * TODO doc.
+     * Get all recent or running clusters from the API
      *
-     * @return
-     * @throws IOException
+     * @return list of all recent or running Clusters
+     * @throws IOException if unable to fetch data from the API
      */
     public ClustersList getClusters() throws IOException {
         HttpRequest request = this.api.buildHttpGetRequest("clusters");
@@ -46,10 +54,9 @@ public class Clusters {
     }
 
     /**
-     * TODO doc.
+     * Stop a running cluster
      *
-     * @return
-     * @throws IOException
+     * @throws IOException if unable to stop Cluster
      */
     public void stopCluster(String clusterId) throws IOException {
         HttpRequest request = this.api.buildHttpDeleteRequest("clusters/" + clusterId);
@@ -57,103 +64,230 @@ public class Clusters {
     }
 
     /**
-     * TODO doc.
+     * List of Clusters
      */
     public static class ClustersList {
+
+        /**
+         * List of Clusters
+         */
         @Key
         public List<Clusters.Cluster> clusters;
+
+        @Override
+        public String toString() {
+            return "ClustersList [" +
+                    "clusters=" + clusters +
+                    ']';
+        }
     }
 
 
     /**
-     * TODO doc.
+     * A Mortar Cluster
      */
     public static class Cluster {
+
+        /**
+         * Id of this cluster.
+         */
         @Key("cluster_id")
         public String clusterId;
 
+        /**
+         * Cluster status code.
+         */
         @Key("status_code")
         public ClusterStatus statusCode;
 
+        /**
+         * Full description of cluster status.
+         */
         @Key("status_description")
         public String statusDescription;
 
+        /**
+         * Address and url for task trackers for this cluster.
+         */
         @Key("task_trackers")
         public List<Map<String, String>> taskTrackers;
 
+        /**
+         * Time cluster started.
+         */
         @Key("start_timestamp")
         public String startTimestamp;
 
+        /**
+         * Time cluster reached running state, or null if still starting.
+         */
         @Key("running_timestamp")
         public String runningTimestamp;
 
+        /**
+         * Time cluster stopped, or null if still running.
+         */
         @Key("stop_timestamp")
         public String stopTimestamp;
 
+        /**
+         * Url for job tracker.
+         */
         @Key("job_tracker_url")
         public String jobTrackerUrl;
 
+        /**
+         * Url for node.
+         */
         @Key("name_node_url")
         public String nameNodeUrl;
 
+        /**
+         * Length of time the cluster has existed.
+         */
         @Key("duration")
         public String duration;
 
+        /**
+         * Type of this cluster.
+         */
         @Key("cluster_type_code")
         public ClusterType clusterTypeCode;
 
+        /**
+         * Full description of cluster type.
+         */
         @Key("cluster_type_description")
         public String clusterTypeDescription;
 
+        /**
+         * Number of nodes in cluster.
+         */
         @Key("size")
         public int size;
+
+        @Override
+        public String toString() {
+            return "Cluster [" +
+                    "clusterId='" + clusterId + '\'' +
+                    ", statusCode=" + statusCode +
+                    ", statusDescription='" + statusDescription + '\'' +
+                    ", taskTrackers=" + taskTrackers +
+                    ", startTimestamp='" + startTimestamp + '\'' +
+                    ", runningTimestamp='" + runningTimestamp + '\'' +
+                    ", stopTimestamp='" + stopTimestamp + '\'' +
+                    ", jobTrackerUrl='" + jobTrackerUrl + '\'' +
+                    ", nameNodeUrl='" + nameNodeUrl + '\'' +
+                    ", duration='" + duration + '\'' +
+                    ", clusterTypeCode=" + clusterTypeCode +
+                    ", clusterTypeDescription='" + clusterTypeDescription + '\'' +
+                    ", size=" + size +
+                    ']';
+        }
     }
 
     /**
-     * TODO doc.
+     * Cluster status.
      */
     public enum ClusterStatus {
 
+        /**
+         * Cluster request received, not yet starting.
+         */
         @Value("pending")
         PENDING,
+
+        /**
+         * Cluster is starting, not yet running.
+         */
         @Value("starting")
         STARTING,
+
+        /**
+         * Cluster is starting but the user has requested that the cluster be shut down.
+         */
         @Value("starting_requested_stop")
         STARTING_REQUESTED_STOP,
+
+        /**
+         * Cluster is running Mortar-specific actions necessary to make the cluster usable.
+         */
         @Value("mortar_bootstrapping")
         MORTAR_BOOTSTRAPPING,
+
+        /**
+         * Cluster is running and able to accept and run jobs.
+         */
         @Value("running")
         RUNNING,
+
+        /**
+         * Cluster is shutting down.
+         */
         @Value("stopping")
         STOPPING,
+
+        /**
+         * Cluster has shut down.
+         */
         @Value("destroyed")
         DESTROYED,
+
+        /**
+         * An error occurred while starting the cluster, and the cluster failed to start.
+         */
         @Value("failed")
-        FAILED;
+        FAILED
     }
 
     /**
-     * TODO doc.
+     * Type of a Cluster
      */
     public enum ClusterType {
 
+        /**
+         * Cluster will last for the duration of a single job and then shut down immediately
+         * upon job completion.
+         */
         @Value("single_job")
         SINGLE_JOB("single_job"),
+
+        /**
+         * Cluster will remain running until it has been idle for over an hour.
+         */
         @Value("persistent")
         PERSISTENT("persistent"),
+
+        /**
+         * Cluster will remain running until explicitly shut down.
+         */
         @Value("permanent")
         PERMANENT("permanent");
 
         private String typeString;
 
+        /**
+         * @param typeString Mortar API compatible string value
+         */
         ClusterType(String typeString) {
             this.typeString = typeString;
         }
 
+        /**
+         * Override toString to return typeString
+         *
+         * @return Mortar API compatible string value typeString
+         */
         public String toString() {
             return typeString;
         }
 
+        /**
+         * Get ClusterType enum from typeString
+         *
+         * @param typeString String value generated by the toString method
+         * @return ClusterType enum for the typeString value
+         */
         public static ClusterType getEnum(String typeString) {
             for (ClusterType t : values()) {
                 if (t.typeString.equalsIgnoreCase(typeString)) {

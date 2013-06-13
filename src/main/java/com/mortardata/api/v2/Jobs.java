@@ -375,7 +375,7 @@ public class Jobs {
          * Job has been stopped by user.
          */
         @Value("stopped")
-        STOPPED;
+        STOPPED
 
     }
 
