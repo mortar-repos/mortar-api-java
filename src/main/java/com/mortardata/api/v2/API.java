@@ -31,7 +31,6 @@ import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.JsonObjectParser;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.client.util.ExponentialBackOff;
-import com.google.api.client.util.Objects;
 
 /**
  * Provides the client for accessing the Mortar v2 API.
@@ -112,12 +111,10 @@ public class API {
     private String getURLString(String path) {
         return this.scheme + "://" + this.host + "/v2/" + path;
     }
-    
+
     @Override
     public String toString() {
-        return Objects.toStringHelper(this)
-                .add("email", this.email)
-                .toString();
+        return "API [email=" + email + "]";
     }
 
 }

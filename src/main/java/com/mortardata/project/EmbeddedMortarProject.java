@@ -31,7 +31,6 @@ import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.api.client.util.Objects;
 import com.mortardata.git.GitUtil;
 import com.mortardata.util.Files;
 
@@ -335,9 +334,7 @@ public class EmbeddedMortarProject {
 
     @Override
     public String toString() {
-        return Objects.toStringHelper(this)
-                .add("rootPath", rootPath)
-                .toString();
+        return "EmbeddedMortarProject [rootPath=" + rootPath + "]";
     }
 
 }
