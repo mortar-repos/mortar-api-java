@@ -143,7 +143,44 @@ public class Jobs {
         }
     }
 
+    /**
+     * Information about an error with a Job.
+     */
+    public static class JobError {
+        
+        /**
+         * Error message.
+         */
+        @Key
+        public String message;
+        
+        /**
+         * Type of error that occurred.
+         */
+        @Key("type")
+        public String errorType;
+        
+        /**
+         * Line number for error, if available.
+         */
+        @Key("line_number")
+        String lineNumber;
+        
+        /**
+         * Column number for error, if available.
+         */
+        @Key("column_number")
+        String columnNumber;
 
+        @Override
+        public String toString() {
+            return "JobError [message=" + message + ", errorType=" + errorType
+                    + ", lineNumber=" + lineNumber + ", columnNumber="
+                    + columnNumber + "]";
+        }
+        
+    }
+    
     /**
      * List of Job.
      */
@@ -191,6 +228,12 @@ public class Jobs {
         @Key("cluster_id")
         public String clusterId;
     
+        /**
+         * Information about an error, if one occurs for this Job. 
+         */
+        @Key("error")
+        public JobError error;
+        
         /**
          * Note added to the job. 
          */
