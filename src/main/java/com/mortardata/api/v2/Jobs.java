@@ -28,31 +28,37 @@ import com.google.api.client.util.Key;
 import com.google.api.client.util.Value;
 
 /**
- * TODO doc.
+ * Run and fetch jobs from the Mortar API.
+ * 
+ * @see <a href="http://help.mortardata.com/reference/api/api_version_2" target="_blank">
+ * http://help.mortardata.com/reference/api/api_version_2</a>
  */
 public class Jobs {
     
     private API api;
     private static final int POLLING_DELAY = 5000;
 
-
+    /**
+     * status_code values that indicate a job in a final state.
+     */
     public static final Set<JobStatus> JOB_STATUS_COMPLETE = new HashSet<JobStatus>
             (Arrays.asList(JobStatus.SCRIPT_ERROR, JobStatus.PLAN_ERROR, JobStatus.SUCCESS,
                     JobStatus.EXECUTION_ERROR, JobStatus.SERVICE_ERROR, JobStatus.STOPPED));
 
     /**
-     * TODO doc.
-     * @param api
+     * Construct a Jobs V2 API.
+     * 
+     * @param api API client
      */
     public Jobs(API api) {
         this.api = api;
     }
 
     /**
-     * TODO doc.
+     * Get all jobs from the API.
      * 
-     * @return
-     * @throws IOException
+     * @return list of all Jobs
+     * @throws IOException if unable to fetch data from the API
      */
     public JobsList getJobs() throws IOException {
         HttpRequest request = this.api.buildHttpGetRequest("jobs");
@@ -60,12 +66,12 @@ public class Jobs {
     }
 
     /**
-     * TODO doc.
+     * Get a subset of jobs from the API.
      * 
-     * @param skip
-     * @param limit
-     * @return
-     * @throws IOException
+     * @param skip Number of jobs to skip (jobs sorted in desc order of startTimestamp)
+     * @param limit Maximum number of jobs to return
+     * @return list of Jobs
+     * @throws IOException if unable to fetch data from the API
      */
     public JobsList getJobs(Integer skip, Integer limit) throws IOException {
         HttpRequest request = this.api.buildHttpGetRequest("jobs?skip=" + skip + "&limit=" + limit);
@@ -73,11 +79,11 @@ public class Jobs {
     }
 
     /**
-     * TODO doc.
+     * Get a job from the API by ID.
      * 
-     * @param jobId
-     * @return
-     * @throws IOException
+     * @param jobId ID of the Job
+     * @return requested Job
+     * @throws IOException if Job does not exist or unable to fetch job from the API
      */
     public Job getJob(String jobId) throws IOException {
         HttpRequest request = this.api.buildHttpGetRequest("jobs/" + jobId);
@@ -85,11 +91,10 @@ public class Jobs {
     }
 
     /**
-     * TODO doc.
+     * Stop a running job.
      *
-     * @param jobId
-     * @return
-     * @throws IOException
+     * @param jobId ID of Job to stop
+     * @throws IOException if unable to stop Job
      */
     public void stopJob(String jobId) throws IOException {
         HttpRequest request = this.api.buildHttpDeleteRequest("jobs/" + jobId);
@@ -97,11 +102,11 @@ public class Jobs {
     }
 
     /**
-     * TODO doc.
+     * Run a new Job.
      *
-     * @param jobRequest
-     * @return job_id
-     * @throws IOException
+     * @param jobRequest Info about job to run
+     * @return job_id ID of job that was started
+     * @throws IOException if unable to run job on API
      */
     public String postJob(JobRequest jobRequest) throws IOException {
         HttpRequest request = this.api.buildHttpPostRequest("jobs", jobRequest.getArguments());
@@ -109,11 +114,11 @@ public class Jobs {
     }
 
     /**
-     * TODO doc.
+     * Get the status of Job.
      *
-     * @param jobId
-     * @return statusCode
-     * @throws IOException
+     * @param jobId ID of job for which to request status
+     * @return status of the job 
+     * @throws IOException if job does not exist or unable to contact API
      */
     public JobStatus getJobStatus(String jobId) throws IOException {
         Job job = getJob(jobId);
@@ -121,12 +126,12 @@ public class Jobs {
     }
 
     /**
-     * TODO doc.
+     * Block until a job has completed, polling for status.
      *
-     * @param jobId
+     * @param jobId ID of job to wait for completion
      * @return final statusCode
-     * @throws IOException
-     * @throws InterruptedException
+     * @throws IOException if unable to contact API for status
+     * @throws InterruptedException if polling interrupted
      */
     public JobStatus blockUntilJobComplete(String jobId) throws IOException, InterruptedException {
         while (true) {
@@ -140,86 +145,172 @@ public class Jobs {
 
 
     /**
-     * TODO doc.
+     * List of Job.
      */
     public static class JobsList {
-        @Key("job_count")
-        public Integer jobCount;
         
+        /**
+         * List of Job.
+         */
         @Key
         public List<Jobs.Job> jobs;
     }
 
     /**
-     * TODO doc.
+     * A Mortar Job.
      */
     public static class Job {
+        
+        /**
+         * Job status code.
+         */
         @Key("status_code")
         public JobStatus statusCode;
     
+        /**
+         * Full description of job status.
+         */
         @Key("status_description")
         public String statusDescription;
     
+        /**
+         * Name of the script that was run.
+         */
         @Key("script_name")
         public String scriptName;
         
+        /**
+         * Name of the script that was run, if a pigscript.
+         */
         @Key("pigscript_name")
         public String pigscriptName;
         
+        /**
+         * Cluster on which this Job is running, or null if not yet assigned.
+         */
         @Key("cluster_id")
         public String clusterId;
     
+        /**
+         * Note added to the job. 
+         */
         @Key
         public String note;
     
+        /**
+         * Overall job progress.
+         */
         @Key
         public Integer progress;
     
+        /**
+         * Type of script that was run: cli_pig, cli_control, 'web'.
+         */
         @Key("script_type")
         public String scriptType;
         
+        /**
+         * Name of the Mortar project for the Job.
+         */
         @Key("project_name")
         public String projectName;
         
+        /**
+         * Parameters used for the Job.
+         */
         @Key("script_parameters")
         public Map<String, String> scriptParameters;
         
+        /**
+         * Git hash or branch at which Job was run.
+         */
         @Key("git_ref")
         public String gitRef;
         
+        /**
+         * Timestamp when the job started running.
+         * Example: 2012-02-28T03:35:42.831000+00:00
+         */
         @Key("start_timestamp")
         public String startTimestamp;
     
+        /**
+         * Timestamp when the job stopped running.
+         * Example: 2012-02-28T03:41:52.613000+00:00"
+         */
         @Key("stop_timestamp")
         public String stopTimestamp;
     
     }
 
     /**
-     * TODO doc.
+     * Job status.
      */
     public enum JobStatus {
-
+        
+        /**
+         * Job received and queued, not yet validated.
+         */
         @Value("starting")
         STARTING,
+        
+        /**
+         * Checking the script for syntax and S3 data storage errors.
+         */
         @Value("validating_script")
         VALIDATING_SCRIPT,
+        
+        /**
+         * An error was detected in the script before running Job.
+         */
         @Value("script_error")
         SCRIPT_ERROR,
+        
+        /**
+         * An error was detected in the script before running Job.
+         */
         @Value("plan_error")
         PLAN_ERROR,
+        
+        /**
+         * Starting a Hadoop cluster for the Job.
+         */
         @Value("starting_cluster")
         STARTING_CLUSTER,
+        
+        /**
+         * Running the Job.
+         */
         @Value("running")
         RUNNING,
+        
+        /**
+         * Job completed successfully.
+         */
         @Value("success")
         SUCCESS,
+        
+        /**
+         * An error occurred during the Job run.
+         */
         @Value("execution_error")
         EXECUTION_ERROR,
+        
+        /**
+         * An internal error occurred while attempting to run the Job.
+         */
         @Value("service_error")
         SERVICE_ERROR,
+        
+        /**
+         * Job is has been requested to be stopped by user.
+         */
         @Value("stopping")
         STOPPING,
+        
+        /**
+         * Job has been stopped by user.
+         */
         @Value("stopped")
         STOPPED;
 
