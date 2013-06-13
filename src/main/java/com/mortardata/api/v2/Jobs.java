@@ -316,6 +316,12 @@ public class Jobs {
          */
         @Value("starting")
         STARTING,
+
+        /**
+         * Pig server starting (happens on first request in session)
+         */
+        @Value("GATEWAY_STARTING")
+        GATEWAY_STARTING,
         
         /**
          * Checking the script for syntax and S3 data storage errors.
