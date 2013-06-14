@@ -112,7 +112,7 @@ public class JobRequest {
     }
 
     /**
-     * @return whether the user should be notified via email when the job is complete
+     * whether the user should be notified via email when the job is complete
      */
     public boolean isNotifyOnJobFinish() {
         return notifyOnJobFinish;
@@ -126,7 +126,7 @@ public class JobRequest {
     }
 
     /**
-     * @return cluster type requested for the job, if job is requesting a new cluster
+     * cluster type requested for the job, if job is requesting a new cluster
      */
     public Clusters.ClusterType getClusterType() {
         return clusterType;
@@ -140,7 +140,7 @@ public class JobRequest {
     }
 
     /**
-     * @return Parameters for running the script
+     * Parameters for running the script
      */
     public Map<String, String> getParameters() {
         return parameters;
@@ -154,7 +154,7 @@ public class JobRequest {
     }
 
     /**
-     * @return Whether the named script is a control script
+     * Whether the named script is a control script
      */
     public boolean isControlScript() {
         return isControlScript;
@@ -168,35 +168,35 @@ public class JobRequest {
     }
 
     /**
-     * @return cluster id of cluster for the job to run on, if job is using existing cluster
+     * cluster id of cluster for the job to run on, if job is using existing cluster
      */
     public String getClusterId() {
         return clusterId;
     }
 
     /**
-     * @return size of hadoop cluster to launch (number of nodes), if launching new cluster
+     * size of hadoop cluster to launch (number of nodes), if launching new cluster
      */
     public int getClusterSize() {
         return clusterSize;
     }
 
     /**
-     * @return version of code (git hash or branch) to use
+     * version of code (git hash or branch) to use
      */
     public String getGitRef() {
         return gitRef;
     }
 
     /**
-     * @return name of the script to be run
+     * name of the script to be run
      */
     public String getScriptName() {
         return scriptName;
     }
 
     /**
-     * @return name of the Mortar project being run
+     * name of the Mortar project being run
      */
     public String getProjectName() {
         return projectName;

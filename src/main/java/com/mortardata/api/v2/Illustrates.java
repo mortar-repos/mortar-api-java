@@ -98,59 +98,102 @@ public class Illustrates {
      */
     public static class IllustrateResult {
 
+        @Key("project_name")
+        private String projectName;
+
+        @Key("alias")
+        private String alias;
+
+        @Key("git_ref")
+        private String gitRef;
+
+        @Key("script_name")
+        private String scriptName;
+
+        @Key("illustrate_id")
+        private String illustrateId;
+
+        @Key("status_code")
+        private String statusCode;
+
+        @Key("status_description")
+        public String statusDescription;
+
+        @Key("web_result_url")
+        private String webResultUrl;
+
+        @Key("result")
+        private Map<String, Object> result;
+
         /**
          * Name of the Mortar project for the illustrate.
          */
-        @Key("project_name")
-        public String projectName;
+        public String getProjectName() {
+            return projectName;
+        }
 
         /**
          * Pig alias illustrated, or null if entire script illustrated.
          */
-        @Key("alias")
-        public String alias;
+        public String getAlias() {
+            return alias;
+        }
 
         /**
          * Git hash or branch at which illustrate was run.
          */
-        @Key("git_ref")
-        public String gitRef;
+        public String getGitRef() {
+            return gitRef;
+        }
 
         /**
          * Name of the script that was illustrated.
          */
-        @Key("script_name")
-        public String scriptName;
+        public String getScriptName() {
+            return scriptName;
+        }
 
         /**
          * ID of the illustrate.
          */
-        @Key("illustrate_id")
-        public String describeId;
+        public String getIllustrateId() {
+            return illustrateId;
+        }
 
         /**
          * Illustrate status code.
          */
-        @Key("status_code")
-        public TaskStatus statusCode;
+        public TaskStatus getStatusCode() {
+            return TaskStatus.getEnum(statusCode);
+        }
+
+        /**
+         * Illustrate status code original string.
+         */
+        public String getStatusCodeString() {
+            return statusCode;
+        }
 
         /**
          * Full description of illustrate status.
          */
-        @Key("status_description")
-        public String statusDescription;
+        public String getStatusDescription() {
+            return statusDescription;
+        }
 
         /**
          * URL to view illustrate results
          */
-        @Key("web_result_url")
-        public String webResultUrl;
+        public String getWebResultUrl() {
+            return webResultUrl;
+        }
 
         /**
          * Illustrate results.
          */
-        @Key("result")
-        public Map<String, Object> result;
+        public Map<String, Object> getResult() {
+            return result;
+        }
 
         @Override
         public String toString() {
@@ -159,7 +202,7 @@ public class Illustrates {
                     ", alias='" + alias + '\'' +
                     ", gitRef='" + gitRef + '\'' +
                     ", scriptName='" + scriptName + '\'' +
-                    ", describeId='" + describeId + '\'' +
+                    ", illustrateId='" + illustrateId + '\'' +
                     ", statusCode=" + statusCode +
                     ", statusDescription='" + statusDescription + '\'' +
                     ", webResultUrl='" + webResultUrl + '\'' +

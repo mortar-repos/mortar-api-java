@@ -17,7 +17,6 @@ package com.mortardata.api.v2;
 
 import com.google.api.client.http.HttpRequest;
 import com.google.api.client.util.Key;
-import com.google.api.client.util.Value;
 
 import java.io.IOException;
 import java.util.List;
@@ -88,84 +87,146 @@ public class Clusters {
      */
     public static class Cluster {
 
+        @Key("cluster_id")
+        private String clusterId;
+
+        @Key("status_code")
+        private String statusCode;
+
+        @Key("status_description")
+        private String statusDescription;
+
+        @Key("task_trackers")
+        private List<Map<String, String>> taskTrackers;
+
+        @Key("start_timestamp")
+        private String startTimestamp;
+
+        @Key("running_timestamp")
+        private String runningTimestamp;
+
+        @Key("stop_timestamp")
+        public String stopTimestamp;
+
+        @Key("job_tracker_url")
+        private String jobTrackerUrl;
+
+        @Key("name_node_url")
+        private String nameNodeUrl;
+
+        @Key("duration")
+        private String duration;
+
+        @Key("cluster_type_code")
+        private String clusterTypeCode;
+
+        @Key("cluster_type_description")
+        private String clusterTypeDescription;
+
+        @Key("size")
+        private int size;
+
+
         /**
          * Id of this cluster.
          */
-        @Key("cluster_id")
-        public String clusterId;
+        public String getClusterId() {
+            return clusterId;
+        }
 
         /**
-         * Cluster status code.
+         * Cluster status code enum.
          */
-        @Key("status_code")
-        public ClusterStatus statusCode;
+        public ClusterStatus getStatusCode() {
+            return ClusterStatus.getEnum(statusCode);
+        }
+
+        /**
+         * Cluster status code original string.
+         */
+        public String getStatusCodeString() {
+            return statusCode;
+        }
 
         /**
          * Full description of cluster status.
          */
-        @Key("status_description")
-        public String statusDescription;
+        public String getStatusDescription() {
+            return statusDescription;
+        }
 
         /**
          * Address and url for task trackers for this cluster.
          */
-        @Key("task_trackers")
-        public List<Map<String, String>> taskTrackers;
+        public List<Map<String, String>> getTaskTrackers() {
+            return taskTrackers;
+        }
 
         /**
-         * Time cluster started.
+         * Timestamp when the cluster started.
+         * Example: 2012-02-28T03:35:42.831000+00:00
          */
-        @Key("start_timestamp")
-        public String startTimestamp;
+        public String getStartTimestamp() {
+            return startTimestamp;
+        }
 
         /**
-         * Time cluster reached running state, or null if still starting.
+         * Timestamp when the cluster reached running state, or null if still starting.
+         * Example: 2012-02-28T03:35:42.831000+00:00
          */
-        @Key("running_timestamp")
-        public String runningTimestamp;
+        public String getRunningTimestamp() {
+            return runningTimestamp;
+        }
 
         /**
-         * Time cluster stopped, or null if still running.
+         * Timestamp when the cluster stopped, or null if still running.
+         * Example: 2012-02-28T03:35:42.831000+00:00
          */
-        @Key("stop_timestamp")
-        public String stopTimestamp;
+        public String getStopTimestamp() {
+            return stopTimestamp;
+        }
 
         /**
          * Url for job tracker.
          */
-        @Key("job_tracker_url")
-        public String jobTrackerUrl;
+        public String getJobTrackerUrl() {
+            return jobTrackerUrl;
+        }
 
         /**
          * Url for node.
          */
-        @Key("name_node_url")
-        public String nameNodeUrl;
+        public String getNameNodeUrl() {
+            return nameNodeUrl;
+        }
 
         /**
          * Length of time the cluster has existed.
          */
-        @Key("duration")
-        public String duration;
+        public String getDuration() {
+            return duration;
+        }
 
         /**
          * Type of this cluster.
          */
-        @Key("cluster_type_code")
-        public ClusterType clusterTypeCode;
+        public ClusterType getClusterTypeCode() {
+            return ClusterType.getEnum(clusterTypeCode);
+        }
 
         /**
          * Full description of cluster type.
          */
-        @Key("cluster_type_description")
-        public String clusterTypeDescription;
+        public String getClusterTypeDescription() {
+            return clusterTypeDescription;
+        }
 
         /**
          * Number of nodes in cluster.
          */
-        @Key("size")
-        public int size;
-
+        public int getSize() {
+            return size;
+        }
         @Override
         public String toString() {
             return "Cluster [" +
@@ -194,56 +255,85 @@ public class Clusters {
         /**
          * Initial state, pending launch.
          */
-        @Value("pending")
-        PENDING,
+        PENDING("pending"),
 
         /**
          * Cluster hardware is being started.
          */
-        @Value("starting")
-        STARTING,
+        STARTING("starting"),
 
         /**
          * Cluster is starting, but has been requested to be stopped as soon as possible.
          */
-        @Value("starting_requested_stop")
-        STARTING_REQUESTED_STOP,
+        STARTING_REQUESTED_STOP("starting_requested_stop"),
 
         /**
          * Cluster software and packages being installed and started.
          */
-        @Value("mortar_bootstrapping")
-        MORTAR_BOOTSTRAPPING,
+        MORTAR_BOOTSTRAPPING("mortar_bootstrapping"),
 
         /**
          * Cluster is ready for use.
          */
-        @Value("running")
-        RUNNING,
+        RUNNING("running"),
 
         /**
          * Cluster is in the process of shutting down.
          */
-        @Value("stopping")
-        STOPPING,
+        STOPPING("stopping"),
 
         /**
          * Cluster logs are being copied to user bucket.
          */
-        @Value("stopping_copying_logs")
-        STOPPING_COPYING_LOGS,
+        STOPPING_COPYING_LOGS("stopping_copying_logs"),
 
         /**
          * Cluster has been shut down.
          */
-        @Value("destroyed")
-        DESTROYED,
+        DESTROYED("destroyed"),
 
         /**
          * Cluster failed to start.
          */
-        @Value("failed")
-        FAILED
+        FAILED("failed"),
+
+        /**
+         * Unrecognized status code.
+         */
+        UNKNOWN("UNKNOWN_STATUS");
+
+        private String stringValue;
+
+        /**
+         * @param stringValue Mortar API compatible string value
+         */
+        ClusterStatus(String stringValue) {
+            this.stringValue = stringValue;
+        }
+
+        /**
+         * Override toString to return stringValue
+         *
+         * @return Mortar API compatible string value
+         */
+        public String toString() {
+            return stringValue;
+        }
+
+        /**
+         * Get TaskStatus enum from stringValue
+         *
+         * @param value String value generated by the toString method
+         * @return TaskStatus enum for the typeString value
+         */
+        public static ClusterStatus getEnum(String value) {
+            for (ClusterStatus t : values()) {
+                if (t.stringValue.equalsIgnoreCase(value)) {
+                    return t;
+                }
+            }
+            return UNKNOWN;
+        }
     }
 
     /**
@@ -255,20 +345,23 @@ public class Clusters {
          * Cluster will last for the duration of a single job and then shut down immediately
          * upon job completion.
          */
-        @Value("single_job")
         SINGLE_JOB("single_job"),
 
         /**
          * Cluster will remain running until it has been idle for over an hour.
          */
-        @Value("persistent")
         PERSISTENT("persistent"),
 
         /**
          * Cluster will remain running until explicitly shut down.
          */
-        @Value("permanent")
-        PERMANENT("permanent");
+        PERMANENT("permanent"),
+
+        /**
+         * Unrecognized cluster type
+         */
+        UNKNOWN("UNKNOWN_CLUSTER_TYPE");
+
 
         private String typeString;
 
@@ -300,7 +393,7 @@ public class Clusters {
                     return t;
                 }
             }
-            throw new IllegalArgumentException();
+            return UNKNOWN;
         }
     }
 }

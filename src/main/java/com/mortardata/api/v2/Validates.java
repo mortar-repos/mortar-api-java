@@ -76,41 +76,73 @@ public class Validates {
      */
     public static class ValidateResult {
 
+        @Key("project_name")
+        private String projectName;
+
+        @Key("git_ref")
+        private String gitRef;
+
+        @Key("script_name")
+        private String scriptName;
+
+        @Key("validate_id")
+        private String validateId;
+
+        @Key("status_code")
+        private String statusCode;
+
+        @Key("status_description")
+        private String statusDescription;
+
+
         /**
          * Name of the Mortar project for the validate.
          */
-        @Key("project_name")
-        public String projectName;
+        public String getProjectName() {
+            return projectName;
+        }
 
         /**
          * Git hash or branch at which validate was run.
          */
-        @Key("git_ref")
-        public String gitRef;
+        public String getGitRef() {
+            return gitRef;
+        }
 
         /**
          * Name of the script that was validated.
          */
-        @Key("script_name")
-        public String scriptName;
+        public String getScriptName() {
+            return scriptName;
+        }
 
         /**
          * ID of the validate
          */
-        @Key("validate_id")
-        public String validateId;
+        public String getValidateId() {
+            return validateId;
+        }
 
         /**
          * Validate status code.
          */
-        @Key("status_code")
-        public TaskStatus statusCode;
+        public TaskStatus getStatusCode() {
+            return TaskStatus.getEnum(statusCode);
+        }
+
+        /**
+         * Validate status code original string.
+         */
+        public String getStatusCodeString() {
+            return statusCode;
+        }
 
         /**
          * Full description of validate status.
          */
-        @Key("status_description")
-        public String statusDescription;
+        public String getStatusDescription() {
+            return statusDescription;
+        }
 
         @Override
         public String toString() {

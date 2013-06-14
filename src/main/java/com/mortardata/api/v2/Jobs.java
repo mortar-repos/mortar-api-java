@@ -25,7 +25,6 @@ import java.util.Set;
 
 import com.google.api.client.http.HttpRequest;
 import com.google.api.client.util.Key;
-import com.google.api.client.util.Value;
 
 /**
  * Run and fetch jobs from the Mortar API.
@@ -122,7 +121,7 @@ public class Jobs {
      */
     public JobStatus getJobStatus(String jobId) throws IOException {
         Job job = getJob(jobId);
-        return job.statusCode;
+        return job.getStatusCode();
     }
 
     /**
@@ -204,92 +203,156 @@ public class Jobs {
      * A Mortar Job.
      */
     public static class Job {
-        
+
+        @Key("status_code")
+        private String statusCode;
+
+        @Key("status_description")
+        private String statusDescription;
+
+        @Key("script_name")
+        private String scriptName;
+
+        @Key("pigscript_name")
+        private String pigscriptName;
+
+        @Key("cluster_id")
+        private String clusterId;
+
+        @Key("error")
+        private JobError error;
+
+        @Key
+        private String note;
+
+        @Key
+        private Integer progress;
+
+        @Key("script_type")
+        private String scriptType;
+
+        @Key("project_name")
+        private String projectName;
+
+        @Key("script_parameters")
+        private Map<String, String> scriptParameters;
+
+        @Key("git_ref")
+        private String gitRef;
+
+        @Key("start_timestamp")
+        private String startTimestamp;
+
+        @Key("stop_timestamp")
+        private String stopTimestamp;
+
+
         /**
          * Job status code.
          */
-        @Key("status_code")
-        public JobStatus statusCode;
-    
+        public JobStatus getStatusCode() {
+            return JobStatus.getEnum(statusCode);
+        }
+
+        /**
+         * Job status code original string.
+         */
+        public String getStatusCodeString() {
+            return statusCode;
+        }
+
         /**
          * Full description of job status.
          */
-        @Key("status_description")
-        public String statusDescription;
-    
+        public String getStatusDescription() {
+            return statusDescription;
+        }
+
         /**
          * Name of the script that was run.
          */
-        @Key("script_name")
-        public String scriptName;
-        
+        public String getScriptName() {
+            return scriptName;
+        }
+
         /**
          * Name of the script that was run, if a pigscript.
          */
-        @Key("pigscript_name")
-        public String pigscriptName;
-        
+        public String getPigscriptName() {
+            return pigscriptName;
+        }
+
         /**
          * Cluster on which this Job is running, or null if not yet assigned.
          */
-        @Key("cluster_id")
-        public String clusterId;
-    
+        public String getClusterId() {
+            return clusterId;
+        }
+
         /**
-         * Information about an error, if one occurs for this Job. 
+         * Information about an error, if one occurs for this Job.
          */
-        @Key("error")
-        public JobError error;
-        
+        public JobError getError() {
+            return error;
+        }
+
         /**
-         * Note added to the job. 
+         * Note added to the job.
          */
-        @Key
-        public String note;
-    
+        public String getNote() {
+            return note;
+        }
+
         /**
          * Overall job progress.
          */
-        @Key
-        public Integer progress;
-    
+        public Integer getProgress() {
+            return progress;
+        }
+
         /**
          * Type of script that was run: cli_pig, cli_control, 'web'.
          */
-        @Key("script_type")
-        public String scriptType;
-        
+        public String getScriptType() {
+            return scriptType;
+        }
+
         /**
          * Name of the Mortar project for the Job.
          */
-        @Key("project_name")
-        public String projectName;
-        
+        public String getProjectName() {
+            return projectName;
+        }
+
         /**
          * Parameters used for the Job.
          */
-        @Key("script_parameters")
-        public Map<String, String> scriptParameters;
-        
+        public Map<String, String> getScriptParameters() {
+            return scriptParameters;
+        }
+
         /**
          * Git hash or branch at which Job was run.
          */
-        @Key("git_ref")
-        public String gitRef;
-        
+        public String getGitRef() {
+            return gitRef;
+        }
+
         /**
          * Timestamp when the job started running.
          * Example: 2012-02-28T03:35:42.831000+00:00
          */
-        @Key("start_timestamp")
-        public String startTimestamp;
-    
+        public String getStartTimestamp() {
+            return startTimestamp;
+        }
+
         /**
          * Timestamp when the job stopped running.
          * Example: 2012-02-28T03:41:52.613000+00:00"
          */
-        @Key("stop_timestamp")
-        public String stopTimestamp;
+        public String getStopTimestamp() {
+            return stopTimestamp;
+        }
 
         @Override
         public String toString() {
@@ -314,74 +377,101 @@ public class Jobs {
         /**
          * Job received and queued, not yet validated.
          */
-        @Value("starting")
-        STARTING,
+        STARTING("starting"),
 
         /**
          * Pig server starting (happens on first request in session)
          */
-        @Value("GATEWAY_STARTING")
-        GATEWAY_STARTING,
+        GATEWAY_STARTING("GATEWAY_STARTING"),
         
         /**
          * Checking the script for syntax and S3 data storage errors.
          */
-        @Value("validating_script")
-        VALIDATING_SCRIPT,
+        VALIDATING_SCRIPT("validating_script"),
         
         /**
          * An error was detected in the script before running Job.
          */
-        @Value("script_error")
-        SCRIPT_ERROR,
+        SCRIPT_ERROR("script_error"),
         
         /**
          * An error was detected in the script before running Job.
          */
-        @Value("plan_error")
-        PLAN_ERROR,
+        PLAN_ERROR("plan_error"),
         
         /**
          * Starting a Hadoop cluster for the Job.
          */
-        @Value("starting_cluster")
-        STARTING_CLUSTER,
+        STARTING_CLUSTER("starting_cluster"),
         
         /**
          * Running the Job.
          */
-        @Value("running")
-        RUNNING,
+        RUNNING("running"),
         
         /**
          * Job completed successfully.
          */
-        @Value("success")
-        SUCCESS,
+        SUCCESS("success"),
         
         /**
          * An error occurred during the Job run.
          */
-        @Value("execution_error")
-        EXECUTION_ERROR,
+        EXECUTION_ERROR("execution_error"),
         
         /**
          * An internal error occurred while attempting to run the Job.
          */
-        @Value("service_error")
-        SERVICE_ERROR,
+        SERVICE_ERROR("service_error"),
         
         /**
          * Job is has been requested to be stopped by user.
          */
-        @Value("stopping")
-        STOPPING,
+        STOPPING("stopping"),
         
         /**
          * Job has been stopped by user.
          */
-        @Value("stopped")
-        STOPPED
+        STOPPED("stopped"),
+
+        /**
+         * Unrecognized status code.
+         */
+        UNKNOWN("UNKNOWN_STATUS");
+
+
+        private String stringValue;
+
+        /**
+         * @param stringValue Mortar API compatible string value
+         */
+        JobStatus(String stringValue) {
+            this.stringValue = stringValue;
+        }
+
+        /**
+         * Override toString to return stringValue
+         *
+         * @return Mortar API compatible string value
+         */
+        public String toString() {
+            return stringValue;
+        }
+
+        /**
+         * Get TaskStatus enum from stringValue
+         *
+         * @param value String value generated by the toString method
+         * @return TaskStatus enum for the typeString value
+         */
+        public static JobStatus getEnum(String value) {
+            for (JobStatus t : values()) {
+                if (t.stringValue.equalsIgnoreCase(value)) {
+                    return t;
+                }
+            }
+            return UNKNOWN;
+        }
 
     }
 
