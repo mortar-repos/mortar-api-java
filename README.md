@@ -8,7 +8,15 @@ The Mortar API for Java lets you interact with the [Mortar API](http://help.mort
 
 ## Installation
 
-TODO mavenized installation
+You can install mortar-api-java from maven via:
+
+```xml
+<dependency>
+  <groupId>com.mortardata.api</groupId>
+  <artifactId>mortar-api-java</artifactId>
+  <version>0.1</version>
+</dependency>
+```
 
 ## Deploying Embedded Mortar Projects
 
@@ -74,4 +82,4 @@ JobStatus finalJobStatus = jobs.blockUntilJobComplete(jobId);
 
 ## Javadoc
 
-TODO Javadoc
+[Javadoc documentation](http://mortardata.github.io/mortar-api-java) is available on github-pages.
