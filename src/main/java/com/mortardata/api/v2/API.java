@@ -45,6 +45,8 @@ public class API {
     
     private static final HttpTransport HTTP_TRANSPORT = new NetHttpTransport();
     private static final JsonFactory JSON_FACTORY = new JacksonFactory();
+
+    private static final int DEFAULT_READ_TIMEOUT = 20000;
     
     private String email;
     private String apiKey;
@@ -83,7 +85,7 @@ public class API {
      * @param host API host (e.g. api.mortardata.com)
      */
     public API(String email, String apiKey, String scheme, String host) {
-        this(email, apiKey, scheme, host, 20000);
+        this(email, apiKey, scheme, host, DEFAULT_READ_TIMEOUT);
     }
 
     /**
