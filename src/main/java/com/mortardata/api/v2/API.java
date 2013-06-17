@@ -45,12 +45,15 @@ public class API {
     
     private static final HttpTransport HTTP_TRANSPORT = new NetHttpTransport();
     private static final JsonFactory JSON_FACTORY = new JacksonFactory();
+
+    private static final int DEFAULT_READ_TIMEOUT = 20000;
     
     private String email;
     private String apiKey;
     private HttpRequestFactory requestFactory;
     private String scheme;
     private String host;
+    private int readTimeout;
     
     /**
      * Constructs a new API client to invoke methods on the Mortar V2 API.
@@ -61,23 +64,48 @@ public class API {
     public API(String email, String apiKey) {
         this(email, apiKey, API.DEFAULT_SCHEME, API.DEFAULT_HOST);
     }
+
+    /**
+     * Constructs a new API client to invoke methods on the Mortar V2 API.
+     *
+     * @param email Email associated with your Mortar user
+     * @param apiKey API key for your Mortar user
+     * @param readTimeout read timeout on GET requests
+     */
+    public API(String email, String apiKey, int readTimeout) {
+        this(email, apiKey, API.DEFAULT_SCHEME, API.DEFAULT_HOST, readTimeout);
+    }
     
     /**
      * Constructs a new API client for custom API host and scheme.
-     * 
+     *
      * @param email Email associated with your Mortar user
      * @param apiKey Email associated with your Mortar user
      * @param scheme http or https
-     * @param host API host (e.g. api.mortardata.com) 
+     * @param host API host (e.g. api.mortardata.com)
      */
     public API(String email, String apiKey, String scheme, String host) {
+        this(email, apiKey, scheme, host, DEFAULT_READ_TIMEOUT);
+    }
+
+    /**
+     * Constructs a new API client for custom API host and scheme.
+     *
+     * @param email Email associated with your Mortar user
+     * @param apiKey Email associated with your Mortar user
+     * @param scheme http or https
+     * @param host API host (e.g. api.mortardata.com)
+     * @param readTimeout read timeout on GET requests
+     */
+    public API(String email, String apiKey, String scheme, String host, int readTimeout) {
         this.email = email;
         this.apiKey = apiKey;
         this.scheme = scheme;
         this.host = host;
+        this.readTimeout = readTimeout;
         this.requestFactory = createHttpRequestFactory();
     }
-    
+
     private HttpRequestFactory createHttpRequestFactory() {
         final BasicAuthentication basicAuth = new BasicAuthentication(this.email, this.apiKey);
         return HTTP_TRANSPORT.createRequestFactory(new HttpRequestInitializer() {
@@ -91,7 +119,9 @@ public class API {
           });
     }
     HttpRequest buildHttpGetRequest(String path) throws IOException {
-        return requestFactory.buildGetRequest(new GenericUrl(getURLString(path)));
+        HttpRequest request = requestFactory.buildGetRequest(new GenericUrl(getURLString(path)));
+        request.setReadTimeout(readTimeout);
+        return request;
     }
 
     HttpRequest buildHttpPostRequest(String path, Object data) throws IOException {
