@@ -3,7 +3,7 @@
   <groupId>com.mortardata.api</groupId>
   <artifactId>mortar-api-java</artifactId>
   <packaging>jar</packaging>
-  <version>0.1-SNAPSHOT</version>
+  <version>0.1</version>
   <name>Mortar API for Java</name>
   <parent>
     <groupId>org.sonatype.oss</groupId>
