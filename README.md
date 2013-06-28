@@ -42,7 +42,7 @@ String githubPassword = "myGithubPassword";
 
 // deploy embedded mortar project to Mortar (on branch master)
 EmbeddedMortarProject project = new EmbeddedMortarProject(pathToEmbeddedMortarProject);
-project.deployToMortar(githubUsername, githubPassword);
+String gitHash = project.deployToMortar(githubUsername, githubPassword);
 ```
 
 ## Running a Job
@@ -65,8 +65,8 @@ String projectName = "my-project-name";
 // pigscript or controlscript to run
 String scriptName = "pigscripts/my-pigscript.pig";
 
-// branch or commit hash I want to run -- usually master
-String codeVersion = "master";
+// branch or commit hash I want to run
+String codeVersion = gitHash;
 
 // cluster size in number of nodes
 Integer clusterSize = 2;
