@@ -97,10 +97,11 @@ public class EmbeddedMortarProject {
      * account (used to sync code to backing Mortar github repo)
      * @param githubPassword Password for github user associated with Mortar 
      * account (used to sync code to backing Mortar github repo)
+     * @return hash for the deployed commit
      * @throws IOException if unable to sync code to Mortar
      */
-    public void deployToMortar(String githubUsername, String githubPassword) throws IOException {
-        deployToMortar(githubUsername, githubPassword, DEPLOY_TARGET_BRANCH_DEFAULT);
+    public String deployToMortar(String githubUsername, String githubPassword) throws IOException {
+        return deployToMortar(githubUsername, githubPassword, DEPLOY_TARGET_BRANCH_DEFAULT);
     }
     
     /**
