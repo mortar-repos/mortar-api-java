@@ -25,6 +25,8 @@ import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.eclipse.jgit.api.CloneCommand;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
+import org.eclipse.jgit.lib.ObjectId;
+import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.transport.CredentialsProvider;
 import org.eclipse.jgit.transport.RefSpec;
 import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
@@ -95,10 +97,11 @@ public class EmbeddedMortarProject {
      * account (used to sync code to backing Mortar github repo)
      * @param githubPassword Password for github user associated with Mortar 
      * account (used to sync code to backing Mortar github repo)
+     * @return hash for the deployed commit
      * @throws IOException if unable to sync code to Mortar
      */
-    public void deployToMortar(String githubUsername, String githubPassword) throws IOException {
-        deployToMortar(githubUsername, githubPassword, DEPLOY_TARGET_BRANCH_DEFAULT);
+    public String deployToMortar(String githubUsername, String githubPassword) throws IOException {
+        return deployToMortar(githubUsername, githubPassword, DEPLOY_TARGET_BRANCH_DEFAULT);
     }
     
     /**
@@ -111,11 +114,12 @@ public class EmbeddedMortarProject {
      * account (used to sync code to Mortar's mirror github repo)
      * @param targetBranch target branch to which deployment should go in 
      * Mortar's mirror github repo
+     * @return hash for the deployed commit
      * @throws IOException
      */
-    public void deployToMortar(String githubUsername, String githubPassword, String targetBranch)
+    public String deployToMortar(String githubUsername, String githubPassword, String targetBranch)
             throws IOException {
-        deployToMortar(githubUsername, githubPassword, targetBranch, 
+        return deployToMortar(githubUsername, githubPassword, targetBranch,
                 Files.createTempDirectory());
     }
     
@@ -141,7 +145,7 @@ public class EmbeddedMortarProject {
         return new File(this.rootPath, MORTAR_PROJECT_MANIFEST_FILENAME);
     }
     
-    void deployToMortar(String githubUsername, String githubPassword, 
+    String deployToMortar(String githubUsername, String githubPassword,
             String targetBranch, File mirrorPath) throws IOException {
         // validate mirrorPath
         if (!mirrorPath.exists()) {
@@ -169,8 +173,9 @@ public class EmbeddedMortarProject {
         try {
             Git git = cloneGitMirror(mirrorPath, cp);
             setupGitMirror(git, cp, githubUsername);
-            syncEmbeddedProjectWithMirror(git, cp, targetBranch, githubUsername);
+            String hash = syncEmbeddedProjectWithMirror(git, cp, targetBranch, githubUsername);
             syncProjectMirrorWithMortarGit(git, cp, targetBranch);
+            return hash;
         } catch (GitAPIException e) {
             throw new IOException("Error processing git command", e);
         }
@@ -220,7 +225,7 @@ public class EmbeddedMortarProject {
             .call();
     }
     
-    void syncEmbeddedProjectWithMirror(Git gitMirror, CredentialsProvider cp, 
+    String syncEmbeddedProjectWithMirror(Git gitMirror, CredentialsProvider cp,
             String targetBranch, String committer) 
             throws GitAPIException, IOException {
         
@@ -268,10 +273,11 @@ public class EmbeddedMortarProject {
         
         // commit it
         logger.debug("git commit");
-        gitMirror.commit()
+        RevCommit revCommit = gitMirror.commit()
             .setCommitter(committer, committer)
             .setMessage("mortar development snapshot commit")
             .call();
+        return ObjectId.toString(revCommit);
     }
     
     void syncProjectMirrorWithMortarGit(Git localBackingGitRepo, CredentialsProvider cp, 
