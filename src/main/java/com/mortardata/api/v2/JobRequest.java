@@ -36,10 +36,11 @@ public class JobRequest {
     private Map<String, String> parameters = new HashMap<String, String>();
     private boolean isControlScript = false;
     private String clusterId;
+    private Boolean isMortarProject;
 
 
     /**
-     * Construct a JobRequest object for running a job on a new cluster
+     * Construct a Mortar Project JobRequest object for running a job on a new cluster
      *
      * @param projectName Mortar project name
      * @param scriptName name of script to be run (without path or extension)
@@ -51,10 +52,11 @@ public class JobRequest {
         this.scriptName = scriptName;
         this.gitRef = gitRef;
         this.clusterSize = clusterSize;
+        this.isMortarProject = true;
     }
 
     /**
-     * Construct a JobRequest object for running a job on an existing cluster
+     * Construct a Mortar Project JobRequest object for running a job on an existing cluster
      *
      * @param projectName Mortar project name
      * @param scriptName name of script to be run (without path or extension)
@@ -66,6 +68,31 @@ public class JobRequest {
         this.scriptName = scriptName;
         this.gitRef = gitRef;
         this.clusterId = clusterId;
+        this.isMortarProject = true;
+    }
+
+    /**
+     * Construct a Web Project JobRequest object for running a job on a new cluster
+     *
+     * @param scriptName name of script to be run (without path or extension)
+     * @param clusterSize size of hadoop cluster to launch (number of nodes)
+     */
+    public JobRequest(String scriptName, int clusterSize) {
+        this.scriptName = scriptName;
+        this.clusterSize = clusterSize;
+        this.isMortarProject = false;
+    }
+
+    /**
+     * Construct a Web Project JobRequest object for running a job on an existing cluster
+     *
+     * @param scriptName name of script to be run (without path or extension)
+     * @param clusterId id of existing cluster
+     */
+    public JobRequest(String scriptName, String clusterId) {
+        this.scriptName = scriptName;
+        this.clusterId = clusterId;
+        this.isMortarProject = false;
     }
 
 
@@ -84,18 +111,23 @@ public class JobRequest {
             arguments.put("cluster_type", clusterType.toString());
             arguments.put("cluster_size", clusterSize);
         }
-        arguments.put("parameters", convertParameters());
         arguments.put("notify_on_job_finish", notifyOnJobFinish);
-        if (isControlScript) {
-            arguments.put("controlscript_name", scriptName);
+        if (isMortarProject) {
+            arguments.put("parameters", convertParameters());
+            if (isControlScript) {
+                arguments.put("controlscript_name", scriptName);
+            } else {
+                arguments.put("pigscript_name", scriptName);
+            }
         } else {
-            arguments.put("pigscript_name", scriptName);
+            arguments.put("parameters", parameters);
+            arguments.put("script_name", scriptName);
         }
         return arguments;
     }
 
     /**
-     * For all elements of parameters, put them in a form compatible with the Mortar API
+     * For all elements of parameters, put them in a form compatible with the Mortar Project API
      *
      * @return List of Map objects with "name" as the key for the parameter name, and "value"
      * as the key for the parameter value.
@@ -155,6 +187,8 @@ public class JobRequest {
 
     /**
      * Whether the named script is a control script
+     *
+     * Mortar Projects ONLY
      */
     public boolean isControlScript() {
         return isControlScript;
@@ -162,6 +196,8 @@ public class JobRequest {
 
     /**
      * Set whether the named script is a control script.  Default is false.
+     *
+     * Mortar Projects ONLY
      */
     public void setControlScript(boolean controlScript) {
         isControlScript = controlScript;
@@ -183,6 +219,8 @@ public class JobRequest {
 
     /**
      * version of code (git hash or branch) to use
+     *
+     * Mortar Projects ONLY
      */
     public String getGitRef() {
         return gitRef;
@@ -197,6 +235,8 @@ public class JobRequest {
 
     /**
      * name of the Mortar project being run
+     *
+     * Mortar Projects ONLY
      */
     public String getProjectName() {
         return projectName;
