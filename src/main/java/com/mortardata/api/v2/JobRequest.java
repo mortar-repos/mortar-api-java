@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Represents the set of arguments needed to request a job run from the Mortar API
+ * Represents the set of arguments needed to request a job run from the Mortar API.
  */
 public class JobRequest {
 
@@ -40,7 +40,7 @@ public class JobRequest {
 
 
     /**
-     * Construct a Mortar Project JobRequest object for running a job on a new cluster
+     * Construct a Mortar Project JobRequest object for running a job on a new cluster.
      *
      * @param projectName Mortar project name
      * @param scriptName name of script to be run (without path or extension)
@@ -56,7 +56,7 @@ public class JobRequest {
     }
 
     /**
-     * Construct a Mortar Project JobRequest object for running a job on an existing cluster
+     * Construct a Mortar Project JobRequest object for running a job on an existing cluster.
      *
      * @param projectName Mortar project name
      * @param scriptName name of script to be run (without path or extension)
@@ -72,7 +72,7 @@ public class JobRequest {
     }
 
     /**
-     * Construct a Web Project JobRequest object for running a job on a new cluster
+     * Construct a Web Project JobRequest object for running a job on a new cluster.
      *
      * @param scriptName name of script to be run (without path or extension)
      * @param clusterSize size of hadoop cluster to launch (number of nodes)
@@ -84,7 +84,7 @@ public class JobRequest {
     }
 
     /**
-     * Construct a Web Project JobRequest object for running a job on an existing cluster
+     * Construct a Web Project JobRequest object for running a job on an existing cluster.
      *
      * @param scriptName name of script to be run (without path or extension)
      * @param clusterId id of existing cluster
@@ -97,9 +97,9 @@ public class JobRequest {
 
 
     /**
-     * Collect all job arguments into a form compatible with the Mortar API
+     * Collect all job arguments into a form compatible with the Mortar API.
      *
-     * @returns GenericData object populated with all job run arguments
+     * @return GenericData object populated with all job run arguments
      */
     public GenericData getArguments() {
         GenericData arguments = new GenericData();
@@ -127,7 +127,7 @@ public class JobRequest {
     }
 
     /**
-     * For all elements of parameters, put them in a form compatible with the Mortar Project API
+     * For all elements of parameters, put them in a form compatible with the Mortar Project API.
      *
      * @return List of Map objects with "name" as the key for the parameter name, and "value"
      * as the key for the parameter value.
@@ -144,7 +144,7 @@ public class JobRequest {
     }
 
     /**
-     * whether the user should be notified via email when the job is complete
+     * Whether the user should be notified via email when the job is complete.
      */
     public boolean isNotifyOnJobFinish() {
         return notifyOnJobFinish;
@@ -158,7 +158,7 @@ public class JobRequest {
     }
 
     /**
-     * cluster type requested for the job, if job is requesting a new cluster
+     * Cluster type requested for the job, if job is requesting a new cluster.
      */
     public Clusters.ClusterType getClusterType() {
         return clusterType;
@@ -172,7 +172,7 @@ public class JobRequest {
     }
 
     /**
-     * Parameters for running the script
+     * Parameters for running the script.
      */
     public Map<String, String> getParameters() {
         return parameters;
@@ -186,7 +186,7 @@ public class JobRequest {
     }
 
     /**
-     * Whether the named script is a control script
+     * Whether the named script is a control script.
      *
      * Mortar Projects ONLY
      */
@@ -204,21 +204,21 @@ public class JobRequest {
     }
 
     /**
-     * cluster id of cluster for the job to run on, if job is using existing cluster
+     * Cluster id of cluster for the job to run on, if job is using existing cluster.
      */
     public String getClusterId() {
         return clusterId;
     }
 
     /**
-     * size of hadoop cluster to launch (number of nodes), if launching new cluster
+     * Size of hadoop cluster to launch (number of nodes), if launching new cluster.
      */
     public int getClusterSize() {
         return clusterSize;
     }
 
     /**
-     * version of code (git hash or branch) to use
+     * Version of code (git hash or branch) to use.
      *
      * Mortar Projects ONLY
      */
@@ -227,14 +227,14 @@ public class JobRequest {
     }
 
     /**
-     * name of the script to be run
+     * Name of the script to be run.
      */
     public String getScriptName() {
         return scriptName;
     }
 
     /**
-     * name of the Mortar project being run
+     * Name of the Mortar Project being run.
      *
      * Mortar Projects ONLY
      */

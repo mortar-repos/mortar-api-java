@@ -94,7 +94,7 @@ public class Illustrates {
     }
 
     /**
-     * Result of a Pig ILLUSTRATE
+     * Result of a Pig ILLUSTRATE.
      */
     public static class IllustrateResult {
 
@@ -182,7 +182,7 @@ public class Illustrates {
         }
 
         /**
-         * URL to view illustrate results
+         * URL to view illustrate results.
          */
         public String getWebResultUrl() {
             return webResultUrl;
