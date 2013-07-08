@@ -90,7 +90,7 @@ public class Describes {
     }
 
     /**
-     * Result of a Pig DESCRIBE
+     * Result of a Pig DESCRIBE.
      */
     public static class DescribeResult {
 
@@ -150,7 +150,7 @@ public class Describes {
         }
 
         /**
-         * ID of the describe
+         * ID of the describe.
          */
         public String getDescribeId() {
             return describeId;
@@ -178,14 +178,14 @@ public class Describes {
         }
 
         /**
-         * URL to view describe results
+         * URL to view describe results.
          */
         public String getWebResultUrl() {
             return webResultUrl;
         }
 
         /**
-         * Describe results
+         * Describe results.
          */
         public Map<String, Object> getResult() {
             return result;

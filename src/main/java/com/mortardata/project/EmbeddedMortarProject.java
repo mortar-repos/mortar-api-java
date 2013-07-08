@@ -139,7 +139,7 @@ public class EmbeddedMortarProject {
     /**
      * Get the embedded project manifest file.
      * 
-     * @return
+     * @return manifest file
      */
     public File getManifestFile() {
         return new File(this.rootPath, MORTAR_PROJECT_MANIFEST_FILENAME);

@@ -72,7 +72,7 @@ public class Validates {
     }
 
     /**
-     * Result of a Pig VALIDATE
+     * Result of a Pig VALIDATE.
      */
     public static class ValidateResult {
 
@@ -117,7 +117,7 @@ public class Validates {
         }
 
         /**
-         * ID of the validate
+         * ID of the validate.
          */
         public String getValidateId() {
             return validateId;
